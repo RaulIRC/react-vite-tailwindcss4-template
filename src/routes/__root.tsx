@@ -18,7 +18,7 @@ function rootNav() {
   return (
     <>
         {/* Navbar can go here */}
-      <header className="navbar-container sticky top-0 z-50 bg-base-100">
+      <header className="navbar-container sticky top-0 z-50 bg-base-100 p-4 gap-2">
         <div className="flex gap-2 justify-center rounded-2xl">
           <NavbarComponent navbarId={navbarId} />
         </div>
