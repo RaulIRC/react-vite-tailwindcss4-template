@@ -1,6 +1,6 @@
 import { auth } from "../../firebase/firebaseConfig";
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from "@tanstack/react-router";
 import { FinancialRecordForm } from "../../components/financialrecord/financial-record-form"; // Financial Record Form Component
 import { FinancialRecordList } from "../../components/financialrecord/financial-record-list";
@@ -11,6 +11,7 @@ export const Dashboard = () => {
 
     const [user, loading, error] = useAuthState(auth);
     //const { records } = useFinancialRecords();
+    const [showForm, setShowForm] = useState(false);
     const totalMonthly = 100;
     const navigate = useNavigate();
 
@@ -47,8 +48,18 @@ export const Dashboard = () => {
                 </h1>
                 {/* <PieChart /> */}
                 <div className="flex justify-center my-4">
-                <FinancialRecordForm />
+                <button 
+                    className="btn btn-primary" 
+                    onClick={() => setShowForm((prev) => !prev)}
+                >
+                    {showForm ? "Hide Form" : "Show Form"}
+                </button>
                 </div>
+                {showForm && (
+                <div className="flex justify-center my-4">
+                    <FinancialRecordForm />
+                </div>
+                )}
                 <div className="stat bg-base-200 p-4 rounded-lg my-4">
                 <div className="stat-title">Total Monthly</div>
                 <div className="stat-value">${totalMonthly}</div>
