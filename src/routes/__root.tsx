@@ -18,8 +18,10 @@ function rootNav() {
   return (
     <>
         {/* Navbar can go here */}
-      <header className="navbar-container sticky top-0 z-50 flex gap-2 justify-center">
-        <NavbarComponent navbarId={navbarId} />
+      <header className="navbar-container sticky top-0 z-50">
+        <div className="flex gap-2 justify-center rounded-2xl">
+          <NavbarComponent navbarId={navbarId} />
+        </div>
       </header>
       {/* Drawer component for mobile view */}  
       <div className="mt-4">
