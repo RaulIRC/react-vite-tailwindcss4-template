@@ -1,31 +1,36 @@
+import { createFileRoute } from '@tanstack/react-router'
+import firebaseLogo from '../assets/firebase-brand-assets/Firebase Logo & Product Icons  2/Firebase Logo/Primary Logomark/SVG/Logomark_Full Color.svg'
 import { useState } from 'react'
-import reactLogo from '../assets/react.svg'
-import viteLogo from '../../public/vite.svg'
 
-const TemplateApp = () => {
+// This is the root index for the website.
 
+export const Route = createFileRoute('/')({
+  component: Index,
+})
+
+function Index() {
+  const tanstackImageUrl = 'https://avatars.githubusercontent.com/u/72518640?s=200&v=4'
   const [count, setCount] = useState(0)
-
   return (
     <>
       <div className='h-screen flex flex-col items-center justify-center overflow-hidden'>
         <div className='flex gap-4'>
-          <a href="https://vite.dev" target="_blank">
-            <img src={viteLogo} className="logo" alt="Vite logo" />
+          <a href="https://firebase.google.com/" target="_blank">
+            <img src={firebaseLogo} className="h-25 w-25 logo" alt="Vite logo" />
           </a>
-          <a href="https://react.dev" target="_blank" className='shadow-lg'>
-            <img src={reactLogo} className="decoration-warning-content" alt="React logo" />
+          <a href="https://tanstack.com/" target="_blank" className='shadow-lg h-25 w-25'>
+            <img src={tanstackImageUrl} className="decoration-warning-content rounded-full" alt="React logo" />
           </a>
         </div>
         <h1 className='text-3xl font-bold mt-4'>Vite + React</h1>
         <div className='mt-4 flex flex-col items-center'>
           {/* DaisyUI + TailwindCSS Modal Button Template */}
           <label htmlFor="my_modal_7" className="btn mb-2" data-theme="light" onClick={() => setCount(count + 1)}>
-            Login! {count}
+            Test Button!
           </label>
           {/* This is standard html button with TailwindCSS theme change and styling */}
-          <button className="btn btn-primary" data-theme="synthwave" onClick={() => setCount(count + 1)}>
-            Count is {count}
+          <button className="btn btn-primary" onClick={() => setCount(count + 1)}>
+            Count is {count}?
           </button>
           <p className='mt-4'>
             Edit <code>src/App.tsx</code> and save to test HMR
@@ -40,4 +45,4 @@ const TemplateApp = () => {
   )
 }
 
-export default TemplateApp;
+export default Route;

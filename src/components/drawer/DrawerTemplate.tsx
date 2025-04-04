@@ -1,7 +1,7 @@
 /* DaisyUI TailwindCSS Drawer Example: */
 // Documentation: https://daisyui.com/components/drawer/
 
-import NavbarTemplate from "../navbar/NavbarTemplate";
+import NavbarComponent from "../navbar/NavbarComponent";
 
 // This is considered a "Parent Component" 
 
@@ -21,7 +21,7 @@ const DrawerTemplate = () => {
         <div className={drawerClass}>
           <input id={drawerId} type={drawerType} className="drawer-toggle" />
           <div className="drawer-content flex flex-col">
-            <NavbarTemplate drawerId={drawerId} />
+            <NavbarComponent drawerId={drawerId} />
             {/* Page content here */}
           </div>
           <div className="drawer-side top-0 z-50">

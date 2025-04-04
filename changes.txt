@@ -1,0 +1,8 @@
+Things I'm going to be doing:
+    - Migrating React Router Dom to -> @Tanstack/React-Router
+    - No vulnerabilities after installing Tanstack/Router & Router Plugin
+    - Tanstack Router Devtools has now been added
+
+    - Issues Detected:
+        - "npm install firebase" has lead to one moderate vulnerability.
+
