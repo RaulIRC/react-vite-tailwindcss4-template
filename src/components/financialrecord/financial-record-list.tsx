@@ -38,14 +38,14 @@ const EditableCell: React.FC<EditableCellProps> = ({
           autoFocus
           onBlur={onBlur}
           style={{ width: "100%" }}
-          className="financial-records-editable-cell-input"
+          className="input input-bordered input-sm"
         />
       ) : typeof value === "string" ? (
         value
       ) : value !== undefined ? (
         value.toString()
-      ): (
-        "N/A" // Placeholder text
+      ) : (
+        <span className="text-gray-400">N/A</span> // Placeholder text
       )}
     </div>
   );
@@ -59,88 +59,94 @@ export const FinancialRecordList = () => {
     updateRecord(id ?? "", { ...records[rowIndex], [columnId]: value });
   };
 
-  const columnHelper = createColumnHelper<FinancialRecord>()
+  const columnHelper = createColumnHelper<FinancialRecord>();
 
   const columns = [
-    columnHelper.accessor('description', {
-      header: 'Description',
-      cell: props => <EditableCell {...props} updateRecord={updateCellRecord} editable />,
-      footer: info => info.column.id,
+    columnHelper.accessor("description", {
+      header: "Description",
+      cell: (props) => <EditableCell {...props} updateRecord={updateCellRecord} editable />,
+      footer: (info) => info.column.id,
     }),
-    columnHelper.accessor('amount', {
-      header: 'Amount',
-      cell: props => <EditableCell {...props} updateRecord={updateCellRecord} editable />,
-      footer: info => info.column.id,
+    columnHelper.accessor("amount", {
+      header: "Amount",
+      cell: (props) => <EditableCell {...props} updateRecord={updateCellRecord} editable />,
+      footer: (info) => info.column.id,
     }),
-    columnHelper.accessor('category', {
-      header: 'Category',
-      cell: props => <EditableCell {...props} updateRecord={updateCellRecord} editable />,
-      footer: info => info.column.id,
+    columnHelper.accessor("category", {
+      header: "Category",
+      cell: (props) => <EditableCell {...props} updateRecord={updateCellRecord} editable />,
+      footer: (info) => info.column.id,
     }),
-    columnHelper.accessor('paymentMethod', {
-      header: 'Payment Method',
-      cell: props => <EditableCell {...props} updateRecord={updateCellRecord} editable />,
-      footer: info => info.column.id,
+    columnHelper.accessor("paymentMethod", {
+      header: "Payment Method",
+      cell: (props) => <EditableCell {...props} updateRecord={updateCellRecord} editable />,
+      footer: (info) => info.column.id,
     }),
-    columnHelper.accessor('date', {
-      header: 'Date',
-      cell: props => <EditableCell {...props} updateRecord={updateCellRecord} editable />,
-      footer: info => info.column.id,
+    columnHelper.accessor("date", {
+      header: "Date",
+      cell: (props) => <EditableCell {...props} updateRecord={updateCellRecord} editable />,
+      footer: (info) => info.column.id,
     }),
     columnHelper.display({
-      id: 'delete',
-      header: 'Delete',
+      id: "delete",
+      header: "Delete",
       cell: ({ row }) => (
         <button
-            onClick={() => deleteRecord(row.original._id ?? "")}
-            className="financial-records-delete-button"
-          >
-            Delete
-          </button>
+          onClick={() => deleteRecord(row.original._id ?? "")}
+          className="btn btn-error btn-sm"
+        >
+          Delete
+        </button>
       ),
-      footer: info => info.column.id
-    })
-
-  ]
+      footer: (info) => info.column.id,
+    }),
+  ];
 
   const table = useReactTable({
-      columns,
-      data: records,
-      getCoreRowModel: getCoreRowModel(),
-    });
-
-  console.log("From record list: ", table.getHeaderGroups());
+    columns,
+    data: records,
+    getCoreRowModel: getCoreRowModel(),
+  });
 
   return (
-    <>
-      <div className="financial-records-table-container">
-        <table className="financial-records-table">
-          <thead>
-            {table.getHeaderGroups().map((headerGroup) => {
-              return (
-                <tr key={headerGroup.id}>
-                {headerGroup.headers.map((header) => (
-                  <th colSpan={header.colSpan} key={header.id}>
-                    {flexRender(header.column.columnDef.header, header.getContext())}
-                  </th>
-                ))}
-              </tr>
-              );
-            })}
-          </thead>
-          <tbody>
-            {table.getRowModel().rows.map((row) => (
-              <tr key={row.id}>
-                {row.getVisibleCells().map((cell) => (
-                  <td key={cell.id}>
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </td>
-                ))}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </>
+    <div className="overflow-x-auto bg-base-100 text-base-content">
+      <table className="table table-zebra w-full">
+      <thead>
+        {table.getHeaderGroups().map((headerGroup) => (
+        <tr key={headerGroup.id}>
+          {headerGroup.headers.map((header) => (
+          <th key={header.id} className="text-xs sm:text-sm">
+            {flexRender(header.column.columnDef.header, header.getContext())}
+          </th>
+          ))}
+        </tr>
+        ))}
+      </thead>
+      <tbody>
+        {records.length > 0 ? (
+        table.getRowModel().rows.map((row) => (
+          <tr key={row.id}>
+          {row.getVisibleCells().map((cell) => (
+            <td key={cell.id} className="text-xs sm:text-sm">
+            {flexRender(cell.column.columnDef.cell, cell.getContext())}
+            </td>
+          ))}
+          </tr>
+        ))
+        ) : (
+        // Placeholder skeleton rows
+        Array.from({ length: 5 }).map((_, index) => (
+          <tr key={index}>
+          {Array.from({ length: columns.length }).map((_, cellIndex) => (
+            <td key={cellIndex}>
+            <div className="skeleton h-4 w-full"></div>
+            </td>
+          ))}
+          </tr>
+        ))
+        )}
+      </tbody>
+      </table>
+    </div>
   );
 };

@@ -9,7 +9,6 @@ const LoginComponent = () => {
     signInWithGoogle,
     handleLogin,
     handleClick,
-    handleRegister,
   } = useAuthLogic();
 
   return (
