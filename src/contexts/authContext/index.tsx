@@ -29,9 +29,16 @@ export const useAuthLogic = () => {
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      await signInWithEmailAndPassword(auth, email, password);
-      const user = auth.currentUser;
+      const result = await signInWithEmailAndPassword(auth, email, password);
+      const user = result.user;
       if (user) {
+        const authInfo = {
+          userID: user.uid,
+          name: user.displayName,
+          profilePhoto: user.photoURL,
+          isAuth: true,
+        };
+        localStorage.setItem("auth", JSON.stringify(authInfo));
         navigate({ to: "/" }); // Redirect to the home page after successful login
         await setDoc(doc(db, "Users", user.uid), {
           email: user.email,

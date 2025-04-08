@@ -46,7 +46,7 @@ export const FinancialRecordsProvider = ({
 }) => {
 
     const [records, setRecords] = useState<FinancialRecord[]>([]);
-    const user = auth.currentUser;
+    const [user] = useAuthState(auth);
     const { userID } = useGetUserInfo();
     const financialRecordCollectionRef = collection(db, "FinancialRecord");
     
@@ -85,6 +85,12 @@ export const FinancialRecordsProvider = ({
     }, [userID]); // Refetch when userID changes
 
     const addFinancialRecord = async (record: FinancialRecord) => {
+        if (!userID) {
+            console.error("User ID is not available, cannot add financial record.");
+            alert("User not authenticated. Please log in.");
+            return;
+        }
+
         try {
             await addDoc(financialRecordCollectionRef, {
                 userID,
