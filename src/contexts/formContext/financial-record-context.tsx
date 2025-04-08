@@ -46,13 +46,13 @@ export const FinancialRecordsProvider = ({
 }) => {
 
     const [records, setRecords] = useState<FinancialRecord[]>([]);
-    const [user] = useAuthState(auth);
+    const user = auth.currentUser;
     const { userID } = useGetUserInfo();
     const financialRecordCollectionRef = collection(db, "FinancialRecord");
     
 
     const fetchRecords = async () => {
-        if (!user) return;
+        if (!userID) return;
         try {
             // Create a query to fetch the records by userId.
             const response = query(financialRecordCollectionRef, where("userID", "==", userID));

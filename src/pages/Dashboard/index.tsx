@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from "@tanstack/react-router";
 import { FinancialRecordForm } from "../../components/financialrecord/financial-record-form"; // Financial Record Form Component
 import { FinancialRecordList } from "../../components/financialrecord/financial-record-list";
+import PieChart from "../../components/PieChart";
 
 // Expense Tracker
 
@@ -47,6 +48,7 @@ export const Dashboard = () => {
                 Welcome {user?.displayName}! Here Are Your Finances:
                 </h1>
                 {/* <PieChart /> */}
+                <PieChart />
                 <div className="flex justify-center my-4">
                 <button 
                     className="btn btn-primary" 
