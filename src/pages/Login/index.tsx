@@ -49,8 +49,8 @@ const LoginComponent = () => {
                 </button>
               </div>
             </form>
-            <div className="form-control mt-4 place-items-center ">
-              <label className="label flex justify-between">
+            <div className="form-control mt-4 text-center">
+              <label className="label flex justify-center">
                 <span className="label-text">New User?</span>
               </label>
               <button onClick={handleClick} className="btn btn-secondary">
