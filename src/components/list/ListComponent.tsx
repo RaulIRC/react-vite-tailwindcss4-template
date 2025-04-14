@@ -170,58 +170,55 @@ export const ListComponent: React.FC = () => {
             </div>
             </li>
         </ul> */}
-
         <ul className="list bg-base-100 rounded-box shadow-primary-content">
             <li className="p-4 pb-2 text-xs opacity-60 tracking-wide flex justify-between items-center">
-                <span>Recent Activity</span>
-                <button
-                    className="btn btn-sm btn-primary"
-                    onClick={() => setIsEditMode(!isEditMode)}
-                >
-                    {isEditMode ? "Done" : "Edit"}
-                </button>
+          <span>Recent Activity</span>
+          <button
+              className="btn btn-sm btn-primary"
+              onClick={() => setIsEditMode(!isEditMode)}
+          >
+              {isEditMode ? "Done" : "Edit"}
+          </button>
             </li>
             {records.length > 0 ? (
-                records.map((record, index) => (
-                    <li key={index} className="list-row">
-                        <div>
-                            <div
-                              className={`text-4xl font-thin tabular-nums fixed-width-amount list-decimal ${
-                                record.amount > 0 ? "text-green-500" : "text-red-500"
-                              }`}
-                            >
-                              {record.amount > 0 ? "+" : "-"} {Math.abs(record.amount)}
-                            </div>
-                        </div>
-                        <div>
-                            <div className="text-xs uppercase font-semibold opacity-60">
-                                {record.category} - {record.date.toLocaleDateString()} - {paymentMethodIcons[normalizeKey(record.paymentMethod)] || "❓"} {record.paymentMethod}
-                            </div>
-                        </div>
-                        {!isEditMode && (
-                            <p className="list-col-wrap text-sm opacity-80">
-                                {record.description}
-                            </p>
-                        )}
-                        {isEditMode && (
-                            <>
-                                <button className="btn btn-square btn-ghost">
-                                    <span role="img" aria-label="play">▶️</span>
-                                </button>
-                                <button
-                                    className="btn btn-square btn-ghost"
-                                    onClick={() => {
-                                        deleteRecord(record._id ?? "");
-                                    }}
-                                >
-                                    <span role="img" aria-label="trash">🗑️</span>
-                                </button>
-                            </>
-                        )}
-                    </li>
-                ))
+          records.map((record, index) => (
+              <li key={index} className="list-row">
+            <div>
+                <div
+                  className={`text-4xl font-thin tabular-nums fixed-width-amount list-decimal text-red-500`}
+                >
+                  -{Math.abs(record.amount)}
+                </div>
+            </div>
+            <div>
+              <div className="text-xs uppercase font-semibold opacity-60">
+                {record.category} - {record.date.toLocaleDateString()} - {paymentMethodIcons[normalizeKey(record.paymentMethod)] || "❓"} {record.paymentMethod}
+              </div>
+              {!isEditMode && (
+                <div className="list-col-wrap flex flex-col gap-1 shadow-sm p-2">
+                  <span className="text-base font-medium opacity-90">{record.description}</span>
+                </div>
+              )}
+            </div>
+            {isEditMode && (
+                <>
+              <button className="btn btn-square btn-ghost">
+                  <span role="img" aria-label="play">▶️</span>
+              </button>
+              <button
+                  className="btn btn-square btn-ghost"
+                  onClick={() => {
+                deleteRecord(record._id ?? "");
+                  }}
+              >
+                  <span role="img" aria-label="trash">🗑️</span>
+              </button>
+                </>
+            )}
+              </li>
+          ))
             ) : (
-                <li className="text-center text-gray-400">No records available.</li>
+            <li className="text-center text-gray-400 flex justify-center pb-8">No records available.</li>
             )}
         </ul>
         </>

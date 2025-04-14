@@ -6,16 +6,31 @@ import { FinancialRecordForm } from "../../components/financialrecord/financial-
 // import { FinancialRecordList } from "../../components/financialrecord/financial-record-list";
 import PieChart from "../../components/PieChart";
 import { ListComponent } from "../../components/list/ListComponent";
+import { useFinancialRecords } from "../../contexts/formContext/financial-record-context";
 
 // Expense Tracker
 
 export const Dashboard = () => {
 
     const [user, loading, error] = useAuthState(auth);
-    //const { records } = useFinancialRecords();
+    const { records } = useFinancialRecords();
     const [showForm, setShowForm] = useState(false);
-    const [totalMonthly] = useState(0);
+    const [monthlyBudget, setMonthlyBudget] = useState(600);
+    const [currentTotal, setCurrentTotal] = useState(0);
     const navigate = useNavigate();
+
+    // Function to calculate and display the total amount from records
+    const getTotalAmount = () => {
+      return records.reduce((sum, record) => sum + Number(record.amount || 0), 0);
+    };
+
+    // const addExpense = (amount, description) => {
+    //     if (currentTotal + amount <= monthlyBudget) {
+    //         setCurrentTotal(currentTotal + amount);
+    //     } else {
+    //         alert("Expense exceeds monthly budget limit!");
+    //     }
+    // }
 
     useEffect(() => {
         if (!loading && !user) {
@@ -63,9 +78,13 @@ export const Dashboard = () => {
                     <FinancialRecordForm />
                 </div>
                 )}
-                <div className="stat p-4 rounded-lg flex justify-center my-4">
-                <div className="stat-title ">Total Monthly</div>
-                <div className="stat-value ">${totalMonthly}</div>
+                {/* <div className="text-center text-2xl font-bold my-4">Total Amount: ${getTotalAmount()}</div> */}
+                <div className="stats flex justify-center my-4">
+                    <div className="stat flex flex-col items-center">
+                        <div className="stat-title">Current Total:</div>
+                        <div className="stat-value">${getTotalAmount()}</div>
+                        <progress className="progress progress-info w-56" value={getTotalAmount()} max={monthlyBudget}></progress>
+                    </div>
                 </div>
                 <div className="overflow-x-auto my-4">
                 {/* <FinancialRecordList /> */}
