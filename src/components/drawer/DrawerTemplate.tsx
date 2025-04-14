@@ -21,7 +21,7 @@ const DrawerTemplate = () => {
         <div className={drawerClass}>
           <input id={drawerId} type={drawerType} className="drawer-toggle" />
           <div className="drawer-content flex flex-col">
-            <NavbarComponent drawerId={drawerId} />
+            <NavbarComponent navbarId={drawerId} />
             {/* Page content here */}
           </div>
           <div className="drawer-side top-0 z-50">

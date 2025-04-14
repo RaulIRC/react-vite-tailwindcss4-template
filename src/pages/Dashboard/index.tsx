@@ -5,6 +5,7 @@ import { useNavigate } from "@tanstack/react-router";
 import { FinancialRecordForm } from "../../components/financialrecord/financial-record-form"; // Financial Record Form Component
 import { FinancialRecordList } from "../../components/financialrecord/financial-record-list";
 import PieChart from "../../components/PieChart";
+import { ListComponent } from "../../components/list/ListComponent";
 
 // Expense Tracker
 
@@ -67,7 +68,8 @@ export const Dashboard = () => {
                 <div className="stat-value">${totalMonthly}</div>
                 </div>
                 <div className="overflow-x-auto my-4">
-                <FinancialRecordList />
+                {/* <FinancialRecordList /> */}
+                <ListComponent description={""} amount={0} category={""} paymentMethod={""} date={""} />
                 </div>
             </div>
             </div>

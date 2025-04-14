@@ -109,8 +109,8 @@ export const FinancialRecordList = () => {
   });
 
   return (
-    <div className="overflow-x-auto bg-base-100 text-base-content">
-      <table className="table table-zebra w-full">
+    <div className="overflow-x-auto bg-base-100 text-base-content rounded-box shadow-md">
+      <table className="list-row w-full">
       <thead>
         {table.getHeaderGroups().map((headerGroup) => (
         <tr key={headerGroup.id}>
