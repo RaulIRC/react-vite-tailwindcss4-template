@@ -1,5 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 import AltSettings from '../../pages/Settings/altindex'
+import Settings from '../../pages/Settings'
 //                 </label>
 
 export const Route = createFileRoute('/settings/')({
@@ -9,7 +10,7 @@ export const Route = createFileRoute('/settings/')({
 function SettingsComponent() {
   return (
     <>
-      <AltSettings />
+      <Settings />
     </>
   )
 }

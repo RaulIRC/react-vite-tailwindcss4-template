@@ -15,8 +15,8 @@ export const Dashboard = () => {
     const [user, loading, error] = useAuthState(auth);
     const { records } = useFinancialRecords();
     const [showForm, setShowForm] = useState(false);
+    // Monthly budget state, default to 600
     const [monthlyBudget, setMonthlyBudget] = useState(600);
-    const [currentTotal, setCurrentTotal] = useState(0);
     const navigate = useNavigate();
 
     // Function to calculate and display the total amount from records
@@ -81,8 +81,8 @@ export const Dashboard = () => {
                 {/* <div className="text-center text-2xl font-bold my-4">Total Amount: ${getTotalAmount()}</div> */}
                 <div className="stats flex justify-center my-4">
                     <div className="stat flex flex-col items-center">
-                        <div className="stat-title">Current Total:</div>
-                        <div className="stat-value">${getTotalAmount()}</div>
+                        <div className="stat-title">Current Total Spent:</div>
+                        <div className="stat-value">${getTotalAmount()} of {monthlyBudget}</div>
                         <progress className="progress progress-info w-56" value={getTotalAmount()} max={monthlyBudget}></progress>
                     </div>
                 </div>
