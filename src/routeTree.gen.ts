@@ -14,6 +14,7 @@ import { createFileRoute } from '@tanstack/react-router'
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as IndexImport } from './routes/index'
+import { Route as SettingsIndexImport } from './routes/settings/index'
 import { Route as PostsIndexImport } from './routes/posts/index'
 import { Route as DashboardIndexImport } from './routes/dashboard/index'
 import { Route as AuthIndexImport } from './routes/auth/index'
@@ -34,6 +35,12 @@ const AboutLazyRoute = AboutLazyImport.update({
 const IndexRoute = IndexImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const SettingsIndexRoute = SettingsIndexImport.update({
+  id: '/settings/',
+  path: '/settings/',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -107,6 +114,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PostsIndexImport
       parentRoute: typeof rootRoute
     }
+    '/settings/': {
+      id: '/settings/'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsIndexImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -119,6 +133,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthIndexRoute
   '/dashboard': typeof DashboardIndexRoute
   '/posts': typeof PostsIndexRoute
+  '/settings': typeof SettingsIndexRoute
 }
 
 export interface FileRoutesByTo {
@@ -128,6 +143,7 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthIndexRoute
   '/dashboard': typeof DashboardIndexRoute
   '/posts': typeof PostsIndexRoute
+  '/settings': typeof SettingsIndexRoute
 }
 
 export interface FileRoutesById {
@@ -138,6 +154,7 @@ export interface FileRoutesById {
   '/auth/': typeof AuthIndexRoute
   '/dashboard/': typeof DashboardIndexRoute
   '/posts/': typeof PostsIndexRoute
+  '/settings/': typeof SettingsIndexRoute
 }
 
 export interface FileRouteTypes {
@@ -149,8 +166,16 @@ export interface FileRouteTypes {
     | '/auth'
     | '/dashboard'
     | '/posts'
+    | '/settings'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/posts/$postId' | '/auth' | '/dashboard' | '/posts'
+  to:
+    | '/'
+    | '/about'
+    | '/posts/$postId'
+    | '/auth'
+    | '/dashboard'
+    | '/posts'
+    | '/settings'
   id:
     | '__root__'
     | '/'
@@ -159,6 +184,7 @@ export interface FileRouteTypes {
     | '/auth/'
     | '/dashboard/'
     | '/posts/'
+    | '/settings/'
   fileRoutesById: FileRoutesById
 }
 
@@ -169,6 +195,7 @@ export interface RootRouteChildren {
   AuthIndexRoute: typeof AuthIndexRoute
   DashboardIndexRoute: typeof DashboardIndexRoute
   PostsIndexRoute: typeof PostsIndexRoute
+  SettingsIndexRoute: typeof SettingsIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
@@ -178,6 +205,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthIndexRoute: AuthIndexRoute,
   DashboardIndexRoute: DashboardIndexRoute,
   PostsIndexRoute: PostsIndexRoute,
+  SettingsIndexRoute: SettingsIndexRoute,
 }
 
 export const routeTree = rootRoute
@@ -195,7 +223,8 @@ export const routeTree = rootRoute
         "/posts/$postId",
         "/auth/",
         "/dashboard/",
-        "/posts/"
+        "/posts/",
+        "/settings/"
       ]
     },
     "/": {
@@ -215,6 +244,9 @@ export const routeTree = rootRoute
     },
     "/posts/": {
       "filePath": "posts/index.tsx"
+    },
+    "/settings/": {
+      "filePath": "settings/index.tsx"
     }
   }
 }
