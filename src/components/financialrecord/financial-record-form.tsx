@@ -22,7 +22,7 @@ export const FinancialRecordForm = () => {
         userId: user?.uid ?? "",
         date: new Date(),
         description: description,
-        amount: parseFloat(amount),
+        amount: Math.abs(parseFloat(amount)),
         category: category,
         paymentMethod: paymentMethod,
       };

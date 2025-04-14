@@ -97,7 +97,7 @@ const ChartComponent = () => {
 
     return (
         <>
-        <div style={{ display: "flex", flexWrap:"wrap", justifyContent: "center", maxHeight: 400 }}>
+        <div style={{ display: "flex", flexWrap:"wrap", justifyContent: "center", maxHeight: 500 }}>
             {/* check if there is data */}
             { data.datasets[0].data.every(item=>item===0) ? (
                 <label>Add an expense using the form below to see your report!</label>
