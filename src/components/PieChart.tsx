@@ -34,11 +34,6 @@ const ChartComponent: React.FC = () => {
         const categoryMap: Record<string, number> = {};
         records.forEach((record: FinancialRecord) => {
 
-            // keeping "salary" category / income, do not show positive expense in chart
-            if(record.amount > 0) {
-                return;
-            }
-
             // either a saved category or "Other" catch all
             const category = record.category || "Other";
 
