@@ -15,8 +15,8 @@ const NavbarComponent = ({ navbarId }: { navbarId: string }) => {
   return (
   <>
   {/* Navbar */}
-    <nav className="fixed w-full max-w-screen-lg px-4 py-2 shadow-md rounded-md lg:px-8 lg:py-3 mt-2 flex justify-center items-center">
-        <div className="navbar rounded-lg m-0.1 top-0 duration-500 ease-in transition-colors border-2">
+    <nav className="fixed w-full max-w-screen-lg px-4 py-2  shadow-md rounded-md lg:px-8 lg:py-3 mt-2 flex justify-center items-center">
+        <div className="navbar rounded-lg m-0.1 top-0 duration-500 glass ease-in transition-colors border-2">
             <div className="flex-1">
             <Link to="/" className="btn btn-ghost text-xl">Budget4Free</Link>
             </div>

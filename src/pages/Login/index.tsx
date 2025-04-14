@@ -1,4 +1,5 @@
 import { useAuthLogic } from '../../contexts/authContext';
+import bowsvg from '../../assets/bow.svg';
 
 const LoginComponent = () => {
   const {
@@ -14,7 +15,14 @@ const LoginComponent = () => {
   return (
     <div className="hero min-h-screen">
       <div className="hero-content flex-col lg:flex-row">
-        <div className="card w-full max-w-sm drop-shadow-2xl bg-base-200">
+        <div className="card w-full max-w-sm drop-shadow-2xl bg-base-200"> 
+            <div className="absolute top-0 right-0 m-2 mt-2">
+            <img
+              src={bowsvg}
+              alt="Decorative"
+              className="w-12 h-12 rounded-full rotate-25 shadow-lg mask mask-squircle active:glass"
+            />
+            </div>
           <div className="card-body">
             <h2 className="card-title self-center">Login</h2>
             <form onSubmit={handleLogin}>

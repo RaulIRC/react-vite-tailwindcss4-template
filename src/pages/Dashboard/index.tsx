@@ -3,7 +3,7 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import { useEffect, useState } from 'react';
 import { useNavigate } from "@tanstack/react-router";
 import { FinancialRecordForm } from "../../components/financialrecord/financial-record-form"; // Financial Record Form Component
-import { FinancialRecordList } from "../../components/financialrecord/financial-record-list";
+// import { FinancialRecordList } from "../../components/financialrecord/financial-record-list";
 import PieChart from "../../components/PieChart";
 import { ListComponent } from "../../components/list/ListComponent";
 
@@ -14,7 +14,7 @@ export const Dashboard = () => {
     const [user, loading, error] = useAuthState(auth);
     //const { records } = useFinancialRecords();
     const [showForm, setShowForm] = useState(false);
-    const totalMonthly = 100;
+    const [totalMonthly] = useState(0);
     const navigate = useNavigate();
 
     useEffect(() => {

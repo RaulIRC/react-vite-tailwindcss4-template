@@ -17,6 +17,7 @@ function rootNav() {
 
   return (
     <>
+    <div className="bg-[url('cloudy.svg')] bg-cover bg-center min-h-screen">
         {/* Navbar can go here */}
       <header className="navbar-container sticky top-0 z-50 bg-base-100 p-4 gap-2">
         <div className="flex gap-2 justify-center rounded-2xl">
@@ -29,6 +30,7 @@ function rootNav() {
         <Outlet /> {/* Outlet renders the given route page here.*/}
       </div>
       <TanStackRouterDevtools />
+      </div>
     </>
   )
 }

@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { Dashboard as DashboardComponent } from '../../pages/Dashboard' // Import the actual component for the dashboard\
-import AltDashboard from '../../pages/Dashboard/altindex'
+// import AltDashboard from '../../pages/Dashboard/altindex'
 import { FinancialRecordsProvider } from '../../contexts/formContext/financial-record-context'
 
 export const Route = createFileRoute('/dashboard/')({
