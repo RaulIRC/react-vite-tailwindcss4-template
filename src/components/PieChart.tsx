@@ -1,8 +1,8 @@
 /*
 PieChart.tsx
 Piechart component to show expense breakdown by category.
-Does not show positive records or "income".
 Data is set by using a listener to get logged in user data.
+Called by pages.Dashboard.index
 */
 
 import { useState, useEffect } from "react";
@@ -13,11 +13,12 @@ import {
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Pie } from 'react-chartjs-2'
 
-ChartJS.register(ArcElement, Tooltip, Legend);
+ChartJS.register(ArcElement, Tooltip, Legend );
 
-const ChartComponent: React.FC = () => {
+const ChartComponent = () => {
     // chart component initialized types, separate default data and setData
     const { records } = useFinancialRecords();
+
     const [data, setData] = useState({
         labels: [] as string[],
         datasets: [
@@ -28,6 +29,35 @@ const ChartComponent: React.FC = () => {
             }
         ],
     });
+
+    // customize the legend
+    const options = {
+            plugins: {
+                legend: {
+                    display: true,
+                    position: "right",
+                    title: {
+                        display: true,
+                        text: "Costs by Category",
+                        color: "rgb(230, 233, 242)",
+                        font : {weight: "bold"},
+                    },
+
+                    // get the piechart data for the legend
+                    labels: {
+                        generateLabels: (chart) => {
+                            const datasets = chart.data.datasets;
+                            return datasets[0].data.map((data, i) => ({
+                                text: `${chart.data.labels[i]} ${": $"} ${data}`,
+                                fillStyle: datasets[0].backgroundColor[i],
+                                index: i,
+                                fontColor:"rgb(230, 233, 242)",
+                            }))
+                        },
+                    }
+                }
+            }
+    }
 
     // listener to get saved data
     useEffect(() => {
@@ -61,14 +91,21 @@ const ChartComponent: React.FC = () => {
                     ],
                     borderWidth:1
                 }
-            ]
+            ],
         });
-    }, [records]);
+    }, [records]); // chart does not constantly update and only when a change is made
 
     return (
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", maxHeight: 400}}>
-            <Pie data={data} />
+        <>
+        <div style={{ display: "flex", flexWrap:"wrap", justifyContent: "center", maxHeight: 400 }}>
+            {/* check if there is data */}
+            { data.datasets[0].data.every(item=>item===0) ? (
+                <label>Add an expense using the form below to see your report!</label>
+            ):(
+                <Pie data={data} options={options}/> 
+            )}
         </div>
+        </>
     )
 }
 export default ChartComponent;
