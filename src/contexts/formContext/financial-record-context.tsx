@@ -95,7 +95,7 @@ export const FinancialRecordsProvider = ({
             await addDoc(financialRecordCollectionRef, {
                 userID,
                 date: serverTimestamp(),
-                decription: record.description,
+                description: record.description,
                 amount: record.amount,
                 category: record.category,
                 paymentMethod: record.paymentMethod,
