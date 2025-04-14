@@ -42,10 +42,10 @@ export const Dashboard = () => {
     
     
     return (
-        <div className="dashboard-container p-6 bg-base-100 text-base-content">
-            <div className="card shadow-lg">
+        <div className="dashboard-container p-6 text-base-content bg-transparent shadow-2xl">
+            <div className="card bg-base-200 shadow-xl">
             <div className="card-body">
-                <h1 className="card-title text-2xl font-bold">
+                <h1 className="card-title text-2xl font-bold flex justify-center my-4">
                 Welcome {user?.displayName}! Here Are Your Finances:
                 </h1>
                 {/* <PieChart /> */}
@@ -63,9 +63,9 @@ export const Dashboard = () => {
                     <FinancialRecordForm />
                 </div>
                 )}
-                <div className="stat bg-base-200 p-4 rounded-lg my-4">
-                <div className="stat-title">Total Monthly</div>
-                <div className="stat-value">${totalMonthly}</div>
+                <div className="stat p-4 rounded-lg flex justify-center my-4">
+                <div className="stat-title ">Total Monthly</div>
+                <div className="stat-value ">${totalMonthly}</div>
                 </div>
                 <div className="overflow-x-auto my-4">
                 {/* <FinancialRecordList /> */}

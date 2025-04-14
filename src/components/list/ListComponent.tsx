@@ -171,9 +171,9 @@ export const ListComponent: React.FC = () => {
             </li>
         </ul> */}
 
-        <ul className="list bg-base-100 rounded-box shadow-md">
+        <ul className="list bg-base-100 rounded-box shadow-primary-content">
             <li className="p-4 pb-2 text-xs opacity-60 tracking-wide flex justify-between items-center">
-                <span>Financial Records</span>
+                <span>Recent Activity</span>
                 <button
                     className="btn btn-sm btn-primary"
                     onClick={() => setIsEditMode(!isEditMode)}
@@ -186,11 +186,11 @@ export const ListComponent: React.FC = () => {
                     <li key={index} className="list-row">
                         <div>
                             <div
-                                className={`text-4xl font-thin tabular-nums fixed-width-amount list-decimal ${
-                                    record.amount > 0 ? "text-green-500" : "text-red-500"
-                                }`}
+                              className={`text-4xl font-thin tabular-nums fixed-width-amount list-decimal ${
+                                record.amount > 0 ? "text-green-500" : "text-red-500"
+                              }`}
                             >
-                                {record.amount > 0 ? "+" : "-"} {record.amount}
+                              {record.amount > 0 ? "+" : "-"} {Math.abs(record.amount)}
                             </div>
                         </div>
                         <div>
