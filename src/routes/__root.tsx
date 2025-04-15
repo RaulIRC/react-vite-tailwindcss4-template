@@ -29,7 +29,7 @@ function rootNav() {
         {/* <hr /> Component Divider */}
         <Outlet /> {/* Outlet renders the given route page here.*/}
       </div>
-      <TanStackRouterDevtools />
+      {/* <TanStackRouterDevtools /> */}
       </div>
     </>
   )

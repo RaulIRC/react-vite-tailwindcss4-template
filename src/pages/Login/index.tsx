@@ -1,5 +1,9 @@
+import { useEffect } from 'react';
+import { useNavigate } from '@tanstack/react-router';
 import { useAuthLogic } from '../../contexts/authContext';
 import bowsvg from '../../assets/bow.svg';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { auth } from '../../firebase/firebaseConfig';
 
 const LoginComponent = () => {
   const {
@@ -11,6 +15,18 @@ const LoginComponent = () => {
     handleLogin,
     handleClick,
   } = useAuthLogic();
+
+  const [user, loading] = useAuthState(auth);
+
+  const navigate = useNavigate();
+
+  if (user) {
+    // Redirect to the login page if the user is not logged in
+    navigate({
+      to: '/dashboard', // Redirect to login page
+      replace: true, // Replace the current entry in the history stack
+    });
+  }
 
   return (
     <div className="hero min-h-screen">

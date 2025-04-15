@@ -52,6 +52,8 @@ export const ListComponent: React.FC = () => {
     const { records, updateRecord, deleteRecord } = useFinancialRecords();
     const [isEditMode, setIsEditMode] = useState(false);
 
+    const sortedRecords = [...records].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+
     const updateCellRecord = (rowIndex: number, columnId: string, value: any) => {
       const id = records[rowIndex]?._id;
       updateRecord(id ?? "", { ...records[rowIndex], [columnId]: value });
@@ -180,8 +182,8 @@ export const ListComponent: React.FC = () => {
               {isEditMode ? "Done" : "Edit"}
           </button>
             </li>
-            {records.length > 0 ? (
-          records.map((record, index) => (
+            {sortedRecords.length > 0 ? (
+          sortedRecords.map((record, index) => (
               <li key={index} className="list-row">
             <div>
                 <div

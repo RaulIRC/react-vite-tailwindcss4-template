@@ -39,16 +39,34 @@ export const FinancialRecordsContext = createContext<
   >(undefined);
 
 
-export const FinancialRecordsProvider = ({
-    children, 
-}: {
-    children: React.ReactNode;
-}) => {
+export const FinancialRecordsProvider = ({children, }: {children: React.ReactNode;}) => {
 
     const [records, setRecords] = useState<FinancialRecord[]>([]);
     const [user] = useAuthState(auth);
     const { userID } = useGetUserInfo();
     const financialRecordCollectionRef = collection(db, "FinancialRecord");
+    // Fetch monthly budget from user settings in Firestore
+    const [monthlyBudget, setMonthlyBudget] = useState<number | null>(null);
+
+    useEffect(() => {
+        const fetchMonthlyBudget = async () => {
+            if (!userID) return;
+            try {
+                const userSettingsRef = doc(db, "UserSettings", userID);
+                const userSettingsSnap = await getDocs(query(collection(db, "UserSettings"), where("__name__", "==", userID)));
+                if (!userSettingsSnap.empty) {
+                    const data = userSettingsSnap.docs[0].data();
+                    setMonthlyBudget(data.monthlyBudget ?? null);
+                } else {
+                    setMonthlyBudget(null);
+                }
+            } catch (error) {
+                console.error("Error fetching user settings: ", error);
+                setMonthlyBudget(null);
+            }
+        };
+        fetchMonthlyBudget();
+    }, [userID]);
     
 
     const fetchRecords = async () => {
