@@ -3,6 +3,7 @@
 import { Link } from "@tanstack/react-router";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../../firebase/firebaseConfig";
+import AvatarComponent from "../profile/AvatarComponent";
 
 // Documentation: https://daisyui.com/components/navbar/
 
@@ -10,8 +11,9 @@ import { auth } from "../../firebase/firebaseConfig";
 
 const NavbarComponent = ({ navbarId }: { navbarId: string }) => {
 
-  const [user] = useAuthState(auth); // Replace with your user state management, e.g., useAuthState from Firebase or context.
+  const [ user ] = useAuthState(auth); // Replace with your user state management, e.g., useAuthState from Firebase or context.
 
+  const isAuth = !!user; // Check if user is authenticated
   return (
   <>
   {/* Navbar */}
@@ -21,13 +23,9 @@ const NavbarComponent = ({ navbarId }: { navbarId: string }) => {
             <Link to="/" className="btn btn-ghost text-xl">Budget4Free</Link>
             </div>
           <div className="flex gap-2">
-            <div className="dropdown dropdown-end">
-              <button className="btn btn-ghost btn-circle avatar">
-                <div className="w-10 rounded-full">
-                  <img
-                    alt="Tailwind CSS Navbar component"
-                    src={user?.photoURL ?? "https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"} />
-                </div>
+            <div className="dropdown dropdown-end ">
+              <button>
+                <AvatarComponent userName={user?.displayName ?? "User"} isAuth={isAuth} />
               </button>
               {/* This is where the dropdown menu starts */}
                 <ul
