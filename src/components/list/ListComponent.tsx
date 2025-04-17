@@ -121,112 +121,70 @@ export const ListComponent: React.FC = () => {
 
     return (
         <>
-        {/* <ul className="menu bg-base-100 rounded-box shadow-md">
-            <li className="menu-title p-4 pb-2 text-xs opacity-60 tracking-wide flex justify-between items-center">
-            <span>Financial Records</span>
-            <button
-                className="btn btn-sm btn-primary"
+            <ul className="list bg-base-100 rounded-box shadow-primary-content">
+          <li className="p-4 pb-2 text-xs opacity-60 tracking-wide flex justify-between items-center">
+              <span>Recent Activity</span>
+              <button
+                className="btn btn-sm btn-primary active:glass"
                 onClick={() => setIsEditMode(!isEditMode)}
-            >
+              >
                 {isEditMode ? "Done" : "Edit"}
-            </button>
-            </li>
-            <li>
-            <div className="overflow-x-auto bg-base-100 rounded-box shadow-md">
-                <table className="table w-full">
-                <thead>
-                    {table.getHeaderGroups().map((headerGroup) => (
-                    <tr key={headerGroup.id}>
-                        {headerGroup.headers.map((header) => (
-                        <th key={header.id} className="text-xs sm:text-sm">
-                            {flexRender(header.column.columnDef.header, header.getContext())}
-                        </th>
-                        ))}
-                    </tr>
-                    ))}
-                </thead>
-                <tbody>
-                    {records.length > 0 ? (
-                    table.getRowModel().rows.map((row) => (
-                        <tr key={row.id}>
-                        {row.getVisibleCells().map((cell) => (
-                            <td key={cell.id} className="text-xs sm:text-sm">
-                            {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                            </td>
-                        ))}
-                        </tr>
-                    ))
-                    ) : (
-                    // Placeholder skeleton rows
-                    Array.from({ length: 5 }).map((_, index) => (
-                        <tr key={index}>
-                        {Array.from({ length: columns.length }).map((_, cellIndex) => (
-                            <td key={cellIndex}>
-                            <div className="skeleton h-4 w-full"></div>
-                            </td>
-                        ))}
-                        </tr>
-                    ))
-                    )}
-                </tbody>
-                </table>
-            </div>
-            </li>
-        </ul> */}
-        <ul className="list bg-base-100 rounded-box shadow-primary-content">
-            <li className="p-4 pb-2 text-xs opacity-60 tracking-wide flex justify-between items-center">
-          <span>Recent Activity</span>
-          <button
-              className="btn btn-sm btn-primary"
-              onClick={() => setIsEditMode(!isEditMode)}
-          >
-              {isEditMode ? "Done" : "Edit"}
-          </button>
-            </li>
-            {sortedRecords.length > 0 ? (
-          sortedRecords.map((record, index) => (
-              <li key={index} className="list-row">
-            <div>
-                <div
+              </button>
+          </li>
+          {sortedRecords.length > 0 ? (
+              sortedRecords.map((record, index) => (
+            <li key={index} className="list-row">
+                <div>
+              <div
                   className={`text-4xl font-thin tabular-nums fixed-width-amount list-decimal text-red-500`}
-                >
-                  -{Math.abs(record.amount)}
+              >
+                  ${Math.abs(record.amount)}
+              </div>
                 </div>
-            </div>
-            <div>
+                <div>
               <div className="text-xs uppercase font-semibold opacity-60">
-                {record.category} - {record.date.toLocaleDateString()} - {paymentMethodIcons[normalizeKey(record.paymentMethod)] || "❓"} {record.paymentMethod}
+                  {record.category} - {record.date.toLocaleDateString()} -{" "}
+                  {paymentMethodIcons[normalizeKey(record.paymentMethod)] || "❓"}{" "}
+                  {record.paymentMethod}
               </div>
               {!isEditMode && (
-                <div className="list-col-wrap flex flex-col gap-1 shadow-sm p-2">
-                  <span className="text-base font-medium opacity-90">{record.description}</span>
-                </div>
+                  <div className="list-col-wrap flex flex-col gap-1 shadow-sm p-2">
+                <span className="text-base font-medium opacity-90">
+                    {record.description}
+                </span>
+                  </div>
               )}
-            </div>
-            {isEditMode && (
-                <>
-              <button className="btn btn-square btn-ghost">
-                  <span role="img" aria-label="play">▶️</span>
-              </button>
-              <button
-                  className="btn btn-square btn-ghost"
-                  onClick={() => {
+                </div>
+                {isEditMode && (
+              <>
+                  <button className="btn btn-square btn-ghost">
+                <span role="img" aria-label="play">
+                    ▶️
+                </span>
+                  </button>
+                  <button
+                className="btn btn-square btn-ghost"
+                onClick={() => {
                     deleteRecord(record._id ?? "");
-                  }}
-              >
-                  <span role="img" aria-label="trash">🗑️</span>
-              </button>
-                </>
-            )}
-              </li>
-          ))
-            ) : (
-            <>
-              {/* <li className="text-center text-gray-400 flex justify-center pb-8">No records available.</li> */}
-              <AlertModal className="flex justify-center pb-8" alertString="No records available." />
-            </>
-            )}
-        </ul>
+                }}
+                  >
+                <span role="img" aria-label="trash">
+                    🗑️
+                </span>
+                  </button>
+              </>
+                )}
+            </li>
+              ))
+          ) : (
+              <>
+            <AlertModal
+                className="flex justify-center pb-8"
+                alertString="No records available."
+            />
+              </>
+          )}
+            </ul>
         </>
     );
 };

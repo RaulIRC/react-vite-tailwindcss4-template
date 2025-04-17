@@ -1,26 +1,22 @@
 import { auth } from "../../firebase/firebaseConfig";
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from "@tanstack/react-router";
 import { FinancialRecordForm } from "../../components/financialrecord/financial-record-form"; // Financial Record Form Component
 // import { FinancialRecordList } from "../../components/financialrecord/financial-record-list";
 import PieChart from "../../components/PieChart";
 import { ListComponent } from "../../components/list/ListComponent";
 import { useFinancialRecords } from "../../contexts/formContext/financial-record-context";
-import { MonthlyBudgetContext } from '../Settings'
 
 // Expense Tracker
 
 export const Dashboard = () => {
     
     const [user, loading, error] = useAuthState(auth);
-    const { records } = useFinancialRecords();
+    const { records, monthlyBudget } = useFinancialRecords();
     const [showForm, setShowForm] = useState(false);
     // Monthly budget state, default to 600
     const navigate = useNavigate();
-    const budgetContext = useContext(MonthlyBudgetContext)
-
-    const monthlyBudget = budgetContext?.monthlyBudget ?? 600; // Default to 600 if context is not available
 
     // Function to calculate and display the total amount from records
     const getTotalAmount = () => {

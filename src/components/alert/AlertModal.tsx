@@ -1,11 +1,14 @@
-const AlertModal = ({ alertString, className }: { alertString: string; className?: string }) => {
+const AlertModal = ({ title, message }: { message?: string; title?: string }) => {
     return (
         <>
-            <div role="alert" className={`alert alert-error ${className || ''}`}>
+            <div role="alert" className={`alert alert-error`}>
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
-                <span>{alertString}</span>
+                <div>
+                    {title && <h3 className="font-bold">{title}</h3>}
+                    {message && <span>{message}</span>}
+                </div>
                 <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" onClick={() => {}}>
                     <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current" fill="none" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />

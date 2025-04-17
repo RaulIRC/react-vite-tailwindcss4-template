@@ -25,6 +25,7 @@ export interface FinancialRecord {
     amount: number;
     category: string;
     paymentMethod: string;
+    monthlyBudget?: number; // Monthly budget amount
   }
 
 interface FinancialRecordsContextType {
@@ -32,6 +33,8 @@ interface FinancialRecordsContextType {
     addRecord: (record: FinancialRecord) => void;
     updateRecord: (id: string, newRecord: FinancialRecord) => void;
     deleteRecord: (id: string) => void;
+    monthlyBudget: number; // Monthly budget amount
+    setMonthlyBudget: (value: number) => void; // Function to set the monthly budget
 }
 
 export const FinancialRecordsContext = createContext<
@@ -45,29 +48,29 @@ export const FinancialRecordsProvider = ({children, }: {children: React.ReactNod
     const [user] = useAuthState(auth);
     const { userID } = useGetUserInfo();
     const financialRecordCollectionRef = collection(db, "FinancialRecord");
-    // Fetch monthly budget from user settings in Firestore
-    const [monthlyBudget, setMonthlyBudget] = useState<number | null>(null);
-
-    useEffect(() => {
-        const fetchMonthlyBudget = async () => {
-            if (!userID) return;
-            try {
-                const userSettingsRef = doc(db, "UserSettings", userID);
-                const userSettingsSnap = await getDocs(query(collection(db, "UserSettings"), where("__name__", "==", userID)));
-                if (!userSettingsSnap.empty) {
-                    const data = userSettingsSnap.docs[0].data();
-                    setMonthlyBudget(data.monthlyBudget ?? null);
-                } else {
-                    setMonthlyBudget(null);
-                }
-            } catch (error) {
-                console.error("Error fetching user settings: ", error);
-                setMonthlyBudget(null);
-            }
-        };
-        fetchMonthlyBudget();
-    }, [userID]);
     
+    const [monthlyBudget, setMonthlyBudget] = useState<number>(() => {
+        const savedBudget = userID ? localStorage.getItem(`monthlyBudget_${userID}`) : null;
+        return savedBudget ? parseInt(savedBudget) : 600;
+    }); // Default budget is 600
+
+    // Set the monthly budget in local storage
+    const setMonthlyBudgetHandler = async (value: number) => {
+        if (!userID) return;
+        try {
+            await addDoc(financialRecordCollectionRef, {
+                userID,
+                monthlyBudget: record.monthlyBudget,
+    
+            });
+            fetchRecords(); // Refresh records after adding
+            alert("Data Successfully Submitted");
+        } catch (error) {
+            console.error("Error adding document: ", error);
+            alert("Error adding financial record");
+        }
+    };
+
 
     const fetchRecords = async () => {
         if (!userID) return;
@@ -88,6 +91,7 @@ export const FinancialRecordsProvider = ({children, }: {children: React.ReactNod
                     amount: data.amount,
                     category: data.category,
                     paymentMethod: data.paymentMethod,
+                    monthlyBudget: data.monthlyBudget, // Monthly budget amount
                 }
             });
 
@@ -117,6 +121,7 @@ export const FinancialRecordsProvider = ({children, }: {children: React.ReactNod
                 amount: record.amount,
                 category: record.category,
                 paymentMethod: record.paymentMethod,
+                monthlyBudget: record.monthlyBudget,
     
             });
             fetchRecords(); // Refresh records after adding
@@ -140,6 +145,7 @@ export const FinancialRecordsProvider = ({children, }: {children: React.ReactNod
                 amount: newRecord.amount,
                 category: newRecord.category,
                 paymentMethod: newRecord.paymentMethod,
+                monthlyBudget: newRecord.monthlyBudget,
                 // If needed, update other fields, like date, based on your requirements
             });
             fetchRecords(); // Refresh records after updating
@@ -176,6 +182,8 @@ export const FinancialRecordsProvider = ({children, }: {children: React.ReactNod
             addRecord: addFinancialRecord, 
             updateRecord: updateFinancialRecord, 
             deleteRecord: deleteFinancialRecord,
+            monthlyBudget,
+            setMonthlyBudget: setMonthlyBudgetHandler, // Pass the handler to the context
             }}
         >
             {children}

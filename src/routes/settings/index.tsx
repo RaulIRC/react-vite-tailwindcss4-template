@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
-import AltSettings from '../../pages/Settings/altindex'
-import Settings, { MonthlyBudgetProvider } from '../../pages/Settings'
+import Settings from '../../pages/Settings'
+import { FinancialRecordsProvider } from '../../contexts/formContext/financial-record-context'
 
 export const Route = createFileRoute('/settings/')({
   component: SettingsComponent,
@@ -9,9 +9,9 @@ export const Route = createFileRoute('/settings/')({
 function SettingsComponent() {
   return (
     <>
-    <MonthlyBudgetProvider>
+    <FinancialRecordsProvider>
       <Settings />
-    </MonthlyBudgetProvider>
+    </FinancialRecordsProvider>
     </>
   )
 }
