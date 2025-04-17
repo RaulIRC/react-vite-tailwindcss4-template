@@ -24,7 +24,7 @@ export const Dashboard = () => {
 
     // Function to calculate and display the total amount from records
     const getTotalAmount = () => {
-      return records.reduce((sum, record) => sum + Number(record.amount || 0), 0);
+      return records.reduce((sum, record) => sum + Number(record.amount || 0), 0).toFixed(2);
     };
 
     // const addExpense = (amount, description) => {
@@ -81,19 +81,26 @@ export const Dashboard = () => {
                     <FinancialRecordForm />
                 </div>
                 )}
-                {/* <div className="text-center text-2xl font-bold my-4">Total Amount: ${getTotalAmount()}</div> */}
                 <div className="stats flex justify-center my-4">
-                    <div className="stat flex flex-col items-center">
-                        <div className="stat-title">Current Total Spent:</div>
-                        <div className="stat-value">${getTotalAmount()} of ${monthlyBudget}</div>
-                        <progress className="progress progress-info w-56" value={getTotalAmount()} max={monthlyBudget}></progress>
-                    </div>
+                    {loading ? (
+                        <div className="stat flex flex-col items-center">
+                            <div className="stat-title skeleton skeleton-text w-32 h-4 mb-2"></div>
+                            <div className="stat-value skeleton skeleton-text w-24 h-6 mb-4"></div>
+                            <progress className="progress w-56"></progress>
+                        </div>
+                    ) : (
+                        <div className="stat flex flex-col items-center">
+                            <div className="stat-title">Current Total Spent:</div>
+                            <div className="stat-value">${getTotalAmount()} of ${monthlyBudget}</div>
+                            <progress className="progress progress-info w-56" value={getTotalAmount()} max={monthlyBudget}></progress>
+                        </div>
+                    )}
                 </div>
+            </div>
                 <div className="overflow-x-auto my-4">
                 {/* <FinancialRecordList /> */}
                 <ListComponent description={""} amount={0} category={""} paymentMethod={""} date={""} />
                 </div>
-            </div>
             </div>
         </div>
     );
