@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { FinancialRecord, useFinancialRecords } from "../../contexts/formContext/financial-record-context";
-import { useReactTable, getCoreRowModel, CellContext, flexRender, createColumnHelper } from "@tanstack/react-table";
+import { useReactTable, getCoreRowModel, CellContext, createColumnHelper } from "@tanstack/react-table";
+import AlertModal from "../alert/AlertModal";
 
-interface EditableCellProps extends CellContext<FinancialRecord, any> {
-  updateRecord: (rowIndex: number, columnId: string, value: any) => void;
+interface EditableCellProps extends CellContext<FinancialRecord, unknown> {
+  updateRecord: (rowIndex: number, columnId: string, value: unknown) => void;
   editable: boolean;
 }
 
@@ -40,7 +41,7 @@ const EditableCell: React.FC<EditableCellProps> = ({
       ) : typeof value === "string" ? (
         value
       ) : value !== undefined ? (
-        value.toString()
+        value !== null ? value.toString() : ""
       ) : (
         <span className="text-gray-400">N/A</span> // Placeholder text
       )}
@@ -112,11 +113,11 @@ export const ListComponent: React.FC = () => {
 
     const normalizeKey = (key: string) => key.replace(/\s+/g, "");
 
-    const table = useReactTable({
-      columns,
-      data: records,
-      getCoreRowModel: getCoreRowModel(),
-    });
+    // const table = useReactTable({
+    //   columns,
+    //   data: records,
+    //   getCoreRowModel: getCoreRowModel(),
+    // });
 
     return (
         <>
@@ -210,7 +211,7 @@ export const ListComponent: React.FC = () => {
               <button
                   className="btn btn-square btn-ghost"
                   onClick={() => {
-                deleteRecord(record._id ?? "");
+                    deleteRecord(record._id ?? "");
                   }}
               >
                   <span role="img" aria-label="trash">🗑️</span>
@@ -220,7 +221,10 @@ export const ListComponent: React.FC = () => {
               </li>
           ))
             ) : (
-            <li className="text-center text-gray-400 flex justify-center pb-8">No records available.</li>
+            <>
+              {/* <li className="text-center text-gray-400 flex justify-center pb-8">No records available.</li> */}
+              <AlertModal className="flex justify-center pb-8" alertString="No records available." />
+            </>
             )}
         </ul>
         </>

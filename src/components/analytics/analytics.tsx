@@ -3,12 +3,11 @@ import { getAnalytics, logEvent } from "firebase/analytics";
 import { useLocation as useReactRouterLocation } from '@tanstack/react-router';
 
 export const Analytics = () => {
-    const webAnalytics = getAnalytics();
     const location = useReactRouterLocation();
-
-    const [debugInfo, setDebugInfo] = useState({ screenName: '', screenClass: ''});
+    const [debugInfo, setDebugInfo] = useState({ screenName: '', screenClass: '' });
 
     const logScreenView = (screenName: string, screenClass: string) => {
+        const webAnalytics = getAnalytics(); // Ensure this is called only when needed
         logEvent(webAnalytics, "page_view", {
             firebase_screen: screenName,
             firebase_screen_class: screenClass
@@ -18,12 +17,12 @@ export const Analytics = () => {
 
     useEffect(() => {
         const currentPath = location.pathname;
-        logScreenView(currentPath, "Analytics")
-    }, [location, webAnalytics]);
+        logScreenView(currentPath, "Analytics");
+    }, [location.pathname]); // Only track changes to the pathname
 
     return (
         <>
-        <div className="red-dot"></div>
+            <div className="red-dot"></div>
             <div style={{
                 position: 'fixed',
                 bottom: '10px',
@@ -38,10 +37,10 @@ export const Analytics = () => {
                 <strong>Debug Info</strong><br />
                 Screen Name: {debugInfo.screenName}<br />
                 Screen Class: {debugInfo.screenClass}<br />
-                CurrentPath: {location.pathname}
+                Current Path: {location.pathname}
             </div>
         </>
-    )
-}
+    );
+};
 
 export default Analytics;
