@@ -30,7 +30,7 @@ function rootNav() {
             <Outlet /> {/* Outlet renders the given route page here.*/}
           </div>
           {/* <TanStackRouterDevtools /> */}
-          <Analytics /> Analytics component for tracking page views
+          <Analytics />
         </div>
     </>
   )

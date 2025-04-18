@@ -9,7 +9,7 @@ import { addDoc,
     deleteDoc,
 } from "firebase/firestore";
 import { auth, db } from "../../firebase/firebaseConfig"; // Firebase auth and db configuration file
-import { createContext, useState, useEffect, useContext, useCallback } from "react";
+import { createContext, useState, useEffect, useContext, useCallback, useMemo } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 
 // We are getting the db information from this tsx class.
@@ -44,7 +44,7 @@ export const SettingsContext = createContext<SettingsContextType | undefined>(un
 
 
 export const SettingsProvider = ({children, }: {children: React.ReactNode;}) => {
-    const [settings, setSettings] = useState<SettingsConfig[]>([]);
+    const [settingsConfig, setSettingsConfig] = useState<SettingsConfig[]>([]);
     const [user] = useAuthState(auth);
     const userID = user?.uid || ""; // Get user ID from auth state, or set to empty string if not authenticated
     const settingsConfigRef = collection(db, "Settings");
@@ -65,7 +65,7 @@ export const SettingsProvider = ({children, }: {children: React.ReactNode;}) => 
                     theme: data.theme || "synthwave", // Default to synthwave if theme is not set
                 };
             });
-            setSettings(fetchedSettings);
+            setSettingsConfig(fetchedSettings);
             // console.log("Config has been Fetched!", fetchedSettings)
         } catch (error) {
             console.error("Error fetching settings: ", error);
@@ -77,7 +77,7 @@ export const SettingsProvider = ({children, }: {children: React.ReactNode;}) => 
         fetchSettingsConfig();
     }, [fetchSettingsConfig]);
 
-    const createSettingsConfig = async (settingsConfig: SettingsConfig) => {
+    const createSettingsConfig = useCallback(async (settingsConfig: SettingsConfig) => {
         if (!userID) {
             console.error("User ID is not available, cannot apply settings.");
             alert("User not authenticated. Please log in.");
@@ -97,9 +97,9 @@ export const SettingsProvider = ({children, }: {children: React.ReactNode;}) => 
             console.error("Error creating settings config: ", error);
             alert("Error creating config");
         }
-    };
+    }, [settingsConfigRef, userID, fetchSettingsConfig]);
 
-    const updateSettingsConfig = async (id: string, newSettings: SettingsConfig) => {
+    const updateSettingsConfig = useCallback(async (id: string, newSettings: SettingsConfig) => {
         if (!userID) return;
         try {
             // Reference to the document to be updated
@@ -117,19 +117,17 @@ export const SettingsProvider = ({children, }: {children: React.ReactNode;}) => 
             console.error("Error updating document: ", error);
             alert("Error updating settings config");
         }
-    }
-    
-    useEffect(() => {
-        fetchSettingsConfig();
-    }, [fetchSettingsConfig, userID]); // Refetch when userID changes
+    }, [settingsConfigRef, userID, fetchSettingsConfig]);
+
+    const contextValue = useMemo(() => ({
+        settingsConfig: settingsConfig,
+        createSettingsConfig: createSettingsConfig,
+        updateSettingsConfig: updateSettingsConfig
+    }), [settingsConfig, createSettingsConfig, updateSettingsConfig])
 
     return (
         <SettingsContext.Provider 
-          value={{ 
-            settingsConfig: settings, // Settings record for the user
-            createSettingsConfig: createSettingsConfig, // Function to create the settings record
-            updateSettingsConfig: updateSettingsConfig, // Function to update the settings record
-            }}
+          value={contextValue}
         >
             {children}
         </SettingsContext.Provider>

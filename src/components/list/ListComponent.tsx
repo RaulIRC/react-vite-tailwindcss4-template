@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { FinancialRecord, useFinancialRecords } from "../../contexts/formContext/financial-record-context";
 import { useReactTable, getCoreRowModel, CellContext, createColumnHelper } from "@tanstack/react-table";
-import AlertModal from "../alert/AlertModal";
+import ErrorAlert from "../alert/ErrorAlert";
 
 interface EditableCellProps extends CellContext<FinancialRecord, unknown> {
   updateRecord: (rowIndex: number, columnId: string, value: unknown) => void;
@@ -120,71 +120,68 @@ export const ListComponent: React.FC = () => {
     // });
 
     return (
-        <>
-            <ul className="list bg-base-100 rounded-box shadow-primary-content">
-          <li className="p-4 pb-2 text-xs opacity-60 tracking-wide flex justify-between items-center">
-              <span>Recent Activity</span>
-              <button
-                className="btn btn-sm btn-primary active:glass"
-                onClick={() => setIsEditMode(!isEditMode)}
-              >
-                {isEditMode ? "Done" : "Edit"}
-              </button>
-          </li>
-          {sortedRecords.length > 0 ? (
-              sortedRecords.map((record, index) => (
-            <li key={index} className="list-row">
-                <div>
-              <div
-                  className={`text-4xl font-thin tabular-nums fixed-width-amount list-decimal text-red-500`}
-              >
+      <>
+      <ul className="list bg-base-100 rounded-box shadow-primary-content">
+        <li className="p-4 pb-2 text-xs opacity-60 tracking-wide flex justify-between items-center">
+          <span>Recent Activity</span>
+          <button
+            className="btn btn-sm btn-primary active:glass"
+            onClick={() => setIsEditMode(!isEditMode)}
+          >
+            {isEditMode ? "Done" : "Edit"}
+          </button>
+        </li>
+        {sortedRecords.length > 0 ? (
+          sortedRecords.map((record, index) => (
+            <li key={index} className="list-row p-4 flex items-center gap-4">
+              <div>
+                <div className={`text-4xl font-thin tabular-nums fixed-width-amount text-red-500`}>
                   ${Math.abs(record.amount)}
-              </div>
                 </div>
-                <div>
-              <div className="text-xs uppercase font-semibold opacity-60">
+              </div>
+              <div className="flex-grow">
+                <div className="text-xs uppercase font-semibold opacity-60">
                   {record.category} - {record.date.toLocaleDateString()} -{" "}
                   {paymentMethodIcons[normalizeKey(record.paymentMethod)] || "❓"}{" "}
                   {record.paymentMethod}
-              </div>
-              {!isEditMode && (
-                  <div className="list-col-wrap flex flex-col gap-1 shadow-sm p-2">
-                <span className="text-base font-medium opacity-90">
-                    {record.description}
-                </span>
-                  </div>
-              )}
                 </div>
-                {isEditMode && (
-              <>
+                {!isEditMode && (
+                  <div className="mt-1 shadow-sm p-2">
+                    <span className="text-base font-medium opacity-90">
+                      {record.description}
+                    </span>
+                  </div>
+                )}
+              </div>
+              {isEditMode && (
+                <div className="flex gap-2">
                   <button className="btn btn-square btn-ghost">
-                <span role="img" aria-label="play">
-                    ▶️
-                </span>
+                    <span role="img" aria-label="play">
+                      ▶️
+                    </span>
                   </button>
                   <button
-                className="btn btn-square btn-ghost"
-                onClick={() => {
-                    deleteRecord(record._id ?? "");
-                }}
+                    className="btn btn-square btn-ghost"
+                    onClick={() => {
+                      deleteRecord(record._id ?? "");
+                    }}
                   >
-                <span role="img" aria-label="trash">
-                    🗑️
-                </span>
+                    <span role="img" aria-label="trash">
+                      🗑️
+                    </span>
                   </button>
-              </>
-                )}
+                </div>
+              )}
             </li>
-              ))
-          ) : (
-              <>
-            <AlertModal
-                className="flex justify-center pb-8"
-                alertString="No records available."
-            />
-              </>
-          )}
-            </ul>
-        </>
+          ))
+        ) : (
+          <li className="p-6">
+            <div className="flex justify-center items-center">
+              <ErrorAlert title="ERROR" message="No records available." />
+            </div>
+          </li>
+        )}
+      </ul>
+    </>
     );
 };

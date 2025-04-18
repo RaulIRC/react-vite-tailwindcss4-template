@@ -1,4 +1,4 @@
-const AlertModal = ({ title, message }: { message?: string; title?: string }) => {
+const ErrorAlert = ({ title, message }: { message?: string; title?: string }) => {
     return (
         <>
             <div role="alert" className={`alert alert-error`}>
@@ -9,14 +9,9 @@ const AlertModal = ({ title, message }: { message?: string; title?: string }) =>
                     {title && <h3 className="font-bold">{title}</h3>}
                     {message && <span>{message}</span>}
                 </div>
-                <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" onClick={() => {}}>
-                    <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current" fill="none" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
             </div>
         </>
     );
 };
 
-export default AlertModal;
+export default ErrorAlert;
