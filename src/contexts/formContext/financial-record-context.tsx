@@ -25,16 +25,34 @@ export interface FinancialRecord {
     amount: number;
     category: string;
     paymentMethod: string;
-    monthlyBudget?: number; // Monthly budget amount
   }
+
+export interface SettingsRecord {
+    _id?: string;
+    userId: string;
+    monthlyBudget: number; // Monthly budget amount
+    userName: string; // User's name or nickname
+  }
+
+export  const defaultSettingsRecord: SettingsRecord = {
+    _id: "",
+    userId: "",
+    monthlyBudget: 600, // Default budget is 600
+    userName: "", // Default username is empty
+  };
+
+interface SettingsContextType {
+    settingsConfig: SettingsRecord[]; // Settings record for the user
+    setSettingsConfig: (settings: SettingsRecord) => void; // Function to update the settings record
+}
+
+export const SettingsContext = createContext<SettingsContextType | undefined>(undefined);
 
 interface FinancialRecordsContextType {
     records: FinancialRecord[];
     addRecord: (record: FinancialRecord) => void;
     updateRecord: (id: string, newRecord: FinancialRecord) => void;
     deleteRecord: (id: string) => void;
-    monthlyBudget: number; // Monthly budget amount
-    setMonthlyBudget: (value: number) => void; // Function to set the monthly budget
 }
 
 export const FinancialRecordsContext = createContext<
@@ -42,34 +60,72 @@ export const FinancialRecordsContext = createContext<
   >(undefined);
 
 
+export const SettingsProvider = ({children, }: {children: React.ReactNode;}) => {
+    const [settings, setSettings] = useState<SettingsRecord[]>([]);
+    // const [user] = useAuthState(auth);
+    const { userID } = useGetUserInfo();
+    const settingsCollectionRef = collection(db, "Settings");
+
+    // Handler for updating monthly budget
+    const settingsHandler = async (settingsRecord: SettingsRecord) => {
+        if (!userID) return;
+        try {
+            await updateDoc(doc(settingsCollectionRef, userID), {
+                userID: userID,
+                monthlyBudget: settingsRecord.monthlyBudget,
+                userName: settingsRecord.userName
+            });
+            settingsHandler(settingsRecord); // Update the state with the new budget
+        } catch (error) {
+            console.error("Error updating monthly budget: ", error);
+        }
+    };
+    
+    useEffect(() => {
+        fetchRecords();
+    }, [userID]); // Refetch when userID changes
+
+    return (
+        <SettingsContext.Provider 
+          value={{ 
+            settings, 
+            setSettingsConfig: settingsHandler, // Pass the handler
+            }}
+        >
+            {children}
+        </SettingsContext.Provider>
+    );
+}
+
 export const FinancialRecordsProvider = ({children, }: {children: React.ReactNode;}) => {
 
     const [records, setRecords] = useState<FinancialRecord[]>([]);
     const [user] = useAuthState(auth);
     const { userID } = useGetUserInfo();
     const financialRecordCollectionRef = collection(db, "FinancialRecord");
-    
-    const [monthlyBudget, setMonthlyBudget] = useState<number>(() => {
-        const savedBudget = userID ? localStorage.getItem(`monthlyBudget_${userID}`) : null;
-        return savedBudget ? parseInt(savedBudget) : 600;
-    }); // Default budget is 600
 
-    // Set the monthly budget in local storage
-    const setMonthlyBudgetHandler = async (value: number) => {
+    // Handler for updating monthly budget
+    const settingsCollectionRef = collection(db, "Settings");
+
+
+    const settingsHandler = async (settingsRecord: SettingsRecord) => {
         if (!userID) return;
         try {
-            await addDoc(financialRecordCollectionRef, {
-                userID,
-                monthlyBudget: record.monthlyBudget,
-    
+            await updateDoc(doc(settingsCollectionRef, userID), {
+                userID: userID,
+                monthlyBudget: settingsRecord.monthlyBudget,
+                userName: settingsRecord.userName
             });
-            fetchRecords(); // Refresh records after adding
-            alert("Data Successfully Submitted");
+            settingsHandler(settingsRecord); // Update the state with the new budget
         } catch (error) {
-            console.error("Error adding document: ", error);
-            alert("Error adding financial record");
+            console.error("Error updating monthly budget: ", error);
         }
     };
+    
+    // const [monthlyBudget, setMonthlyBudget] = useState<number>(() => {
+    //     const savedBudget = userID ? localStorage.getItem(`monthlyBudget_${userID}`) : null;
+    //     return savedBudget ? parseInt(savedBudget) : 600;
+    // }); // Default budget is 600
 
 
     const fetchRecords = async () => {
@@ -183,7 +239,7 @@ export const FinancialRecordsProvider = ({children, }: {children: React.ReactNod
             updateRecord: updateFinancialRecord, 
             deleteRecord: deleteFinancialRecord,
             monthlyBudget,
-            setMonthlyBudget: setMonthlyBudgetHandler, // Pass the handler to the context
+            settingsConfig: settingsHandler, // Pass the handler to the context
             }}
         >
             {children}
