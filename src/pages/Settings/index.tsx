@@ -10,7 +10,6 @@ export const Settings = () => {
   const { settingsConfig, updateSettingsConfig } = useSettingsConfig();
 
   const id = settingsConfig?.[0]?._id ?? ''; // Ensure id is always a string
-  const currentName = settingsConfig?.[0]?.userName;
 
   const handleUpdate = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
@@ -22,8 +21,8 @@ export const Settings = () => {
       updateConfig.monthlyBudget = monthlyBudget;
     }
     // Update username if it has changed
-    if (userName !== currentName) {
-      updateConfig.userName = userName || '';
+    if (userName !== settingsConfig?.[0]?.userName && userName !== "") {
+      updateConfig.userName = userName;
     }
 
     // Update currency if it has been set
@@ -57,7 +56,7 @@ export const Settings = () => {
           <h2 className="text-lg font-semibold mb-2">Change Username</h2>
           <input
             type="text"
-            placeholder="Enter new username"
+            placeholder={settingsConfig?.[0]?.userName || 'Enter username here.'}
             value={userName}
             onChange={(event) => setUserName(String(event.target.value))}
             className="input input-bordered w-full mb-4"
@@ -72,7 +71,7 @@ export const Settings = () => {
             min={0}
             value={monthlyBudget}
             onChange={(event) => setMonthlyBudget(Number(event.target.value))}
-            placeholder="Enter monthly budget"
+            placeholder={settingsConfig?.[0]?.monthlyBudget.toString()}
             className="input input-bordered w-full mb-4"
             />
             <button type="submit"
