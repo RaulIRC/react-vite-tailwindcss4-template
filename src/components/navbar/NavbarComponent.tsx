@@ -1,6 +1,6 @@
 /* DaisyUI TailwindCSS Navbar/Title Only Example: */
 
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../../firebase/firebaseConfig";
 import AvatarComponent from "../profile/AvatarComponent";
@@ -13,7 +13,25 @@ const NavbarComponent = ({ navbarId }: { navbarId: string }) => {
 
   const [ user ] = useAuthState(auth); // Replace with your user state management, e.g., useAuthState from Firebase or context.
 
+  const navigate = useNavigate(); // Hook to programmatically navigate
   const isAuth = !!user; // Check if user is authenticated
+
+  const handleSignOutAsync = async () => {
+    try {
+      await auth.signOut(); // Sign out the user
+      localStorage.clear(); // Clear local storage;
+      console.log("User signed out successfully.");
+      navigate({to: '/'}); // Redirect to home page after sign out
+    } catch (error) {
+      console.error("Error signing out:", error); // Handle sign-out error
+    }
+  };
+
+  const signUserOut: MouseEventHandler<HTMLAnchorElement> = (event: { preventDefault: () => void; }) => {
+    event.preventDefault(); // Prevent default anchor behavior
+    handleSignOutAsync(); // Call the sign-out function
+  }
+
   return (
   <>
   {/* Navbar */}
@@ -61,7 +79,7 @@ const NavbarComponent = ({ navbarId }: { navbarId: string }) => {
                   {!user ? (
                   <Link to="/auth">Login</Link>
                   ) : (
-                  <Link to="/" onClick={() => auth.signOut()}>Logout</Link>
+                  <Link to="/" onClick={signUserOut}>Logout</Link>
                   )}
                 </li>
                 </ul>

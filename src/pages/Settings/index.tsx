@@ -1,14 +1,25 @@
 import * as React from 'react'
-import { useFinancialRecords } from '../../contexts/formContext/financial-record-context';
+import { auth } from '../../firebase/firebaseConfig'
+import { collection } from 'firebase/firestore'
 
 export const Settings = () => {
+  const [user] = auth.currentUser // Get the current user from Firebase authentication
+  const settingsCollectionRef = collection(user, 'settings') // Reference to the settings collection in Firestore
   const [ originalBudget, setOriginalBudget ] = React.useState<number>(600) // Default budget is 600
-  const { setMonthlyBudget } = useFinancialRecords();
+  
+  const [nickname, setNickname] = React.useState<string>('') // State for nickname
+  const [monthlyBudget, setMonthlyBudget] = React.useState<number>(0) // State for monthly budget
+  const [currency, setCurrency] = React.useState<string>('') // State for currency
+  const [theme, setTheme] = React.useState<string>('') // State for theme
 
+  const createSettingsCollection = async () => {
+    
+  }
   // Handler for updating monthly budget
   const handleSubmit = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault()
-    setMonthlyBudget(originalBudget) // Update the budget with the current state value
+
+    
   }
 
   React.useEffect(() => {

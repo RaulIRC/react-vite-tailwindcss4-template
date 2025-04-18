@@ -3,6 +3,8 @@ import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider } from "firebase/auth";
 import { getAnalytics } from "firebase/analytics";
 import { getFirestore } from "firebase/firestore";
+import { activate, fetchConfig, getRemoteConfig } from "firebase/remote-config";
+import { fetchAndActivate, getValue } from "firebase/remote-config";
 
 // Ensure all required environment variables are defined
 const requiredEnvVars = [
@@ -36,12 +38,43 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 
-const analytics = getAnalytics(app);
 const auth = getAuth(app);
 const db = getFirestore(app);
+const analytics = getAnalytics(app);
+const remoteConfig = getRemoteConfig(app);
 const provider = new GoogleAuthProvider();
 
-export { analytics, auth, db, provider };
+export { analytics, auth, db, provider, remoteConfig };
+
+remoteConfig.settings.minimumFetchIntervalMillis = 3600000; // 1 hour
+
+const isFetched = await fetchAndActivate(remoteConfig);
+
+if (isFetched) {
+  console.log("Remote config activated and fetched successfully.");
+  const nickname = getValue(remoteConfig, "nickname");
+  const monthlyBudget = getValue(remoteConfig, "monthlyBudget");
+  const currency = getValue(remoteConfig, "currency");
+  const theme = getValue(remoteConfig, "theme");
+  console.log("Nickname: ", nickname);
+  console.log("Monthly Budget: ", monthlyBudget);
+  console.log("Currency: ", currency);
+  console.log("Theme: ", theme);
+  // Use the fetched values in your application
+}
+else {
+  console.log("Remote config was already up to date.");
+}
+
+remoteConfig.defaultConfig = {
+  nickname: "User",
+  monthlyBudget: 1000,
+  currency: "USD",
+  theme: "light",
+}
+
+fetchConfig(remoteConfig);
+activate(remoteConfig);
 
 // firebase login
 // firebase init
