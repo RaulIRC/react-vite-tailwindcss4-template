@@ -1,7 +1,4 @@
 import { useNavigate } from '@tanstack/react-router';
-import { getAuth } from 'firebase/auth';
-import { auth } from '../../firebase/firebaseConfig'
-import React from 'react'
 import { useAuthLogic } from '../../contexts/authContext';
 
 const RegisterPage = () => {

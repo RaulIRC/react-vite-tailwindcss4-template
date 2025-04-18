@@ -15,8 +15,6 @@ export const Route = createRootRoute({
 
 function rootNav() {
 
-  const navbarId = 'navigation-bar'; // This is the id used for the drawer component, must be unique in the DOM.
-
   return (
     <>
         <div className="bg-[url('cloudy.svg')] bg-cover bg-center min-h-screen">

@@ -1,37 +1,54 @@
 import * as React from 'react'
-import { useSettingsConfig } from '../../contexts/formContext/financial-record-context';
-import { useAuthState } from 'react-firebase-hooks/auth';
-import { auth } from '../../firebase/firebaseConfig';
+import { useSettingsConfig, SettingsConfig } from '../../contexts/formContext/financial-record-context';
 
 export const Settings = () => {
-  const [ newBudget, setNewBudget ] = React.useState<number>() // Default budget is 600
+  const [ monthlyBudget, setMonthlyBudget ] = React.useState<number>() // Default budget is 600
   const [ userName, setUserName ] = React.useState<string>("") // State for the username
+  const [ currency, setCurrency ] = React.useState<string>("")
+  const [ theme, setTheme ] = React.useState<string>("")
+
   const { settingsConfig, updateSettingsConfig } = useSettingsConfig();
-  const [ user ] = useAuthState(auth);
 
-  // Handler for updating the settings configuration.
-  const handleSubmit = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const id = settingsConfig?.[0]?._id ?? ''; // Ensure id is always a string
+  const currentName = settingsConfig?.[0]?.userName;
+
+  const handleUpdate = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
-    handleUpdateSettingsConfig();
-  };
 
-  const handleUpdateSettingsConfig = () => {
-    const updateConfig = {
-      userId: user?.uid ?? '',
-      monthlyBudget: newBudget ?? 600, // Ensure monthlyBudget is always a number
-      userName: userName || user?.displayName || '', // Ensure userName is always a string
-    };
+    const updateConfig: Partial<SettingsConfig> = {};
 
-    const id = settingsConfig?.[0]?._id ?? ''; // Ensure id is always a string
-    if (id) {
-      updateSettingsConfig(id, updateConfig); // Update settings configuration with the correct arguments
-      setNewBudget(0); // Reset the budget input field after submission
-      setUserName(''); // Reset the username input field after submission
-    } else {
-      console.error('No valid settingsConfig ID found.');
+    // update budget if it has changed
+    if (monthlyBudget !== undefined && monthlyBudget !== settingsConfig?.[0].monthlyBudget) {
+      updateConfig.monthlyBudget = monthlyBudget;
     }
-  };
+    // Update username if it has changed
+    if (userName !== currentName) {
+      updateConfig.userName = userName || '';
+    }
 
+    // Update currency if it has been set
+    if (currency !== settingsConfig?.[0]?.currency) {
+      updateConfig.currency = currency;
+    }
+
+    // Update theme if it has been set
+    if (theme !== settingsConfig?.[0]?.theme) {
+      updateConfig.theme = theme;
+    }
+
+    if (Object.keys(updateConfig).length > 0 && id) {
+      updateSettingsConfig(id, updateConfig as SettingsConfig);
+      setMonthlyBudget(0); // Reset the budget input field after submission (or maybe keep the value?)
+      setUserName(''); // Reset the username input field after submission
+      setCurrency('');
+      setTheme('');
+    } else if (!id) {
+      console.error('No valid settingsConfig ID found.');
+      console.log(settingsConfig);
+    } else {
+      console.log('No settings changes detected.');
+    }
+  }
   return (
     <div className="p-4 mt-16">
       <h1 className="text-2xl font-bold mb-4">Settings</h1>
@@ -41,23 +58,26 @@ export const Settings = () => {
           <input
             type="text"
             placeholder="Enter new username"
+            value={userName}
+            onChange={(event) => setUserName(String(event.target.value))}
             className="input input-bordered w-full mb-4"
           />
-          <button className="btn btn-primary w-full">Save Username</button>
+          <button className="btn btn-primary w-full"
+          onClick={handleUpdate}>Save Username</button>
         </div>
         <div className="card bg-base-100 shadow-md p-4">
             <h2 className="text-lg font-semibold mb-2">Monthly Budget</h2>
             <input
             type="number"
             min={0}
-            value={newBudget}
-            onChange={(event) => setNewBudget(Number(event.target.value))}
+            value={monthlyBudget}
+            onChange={(event) => setMonthlyBudget(Number(event.target.value))}
             placeholder="Enter monthly budget"
             className="input input-bordered w-full mb-4"
             />
             <button type="submit"
             className="btn btn-success w-full"
-            onClick={handleSubmit}
+            onClick={handleUpdate}
             >
             Save Budget
             </button>

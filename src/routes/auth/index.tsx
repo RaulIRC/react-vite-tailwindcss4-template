@@ -1,5 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 import LoginPage from '../../pages/Login';
+import { SettingsProvider } from '../../contexts/formContext/financial-record-context';
 
 export const Route = createFileRoute('/auth/')({
   component: RouteComponent,
@@ -8,7 +9,9 @@ export const Route = createFileRoute('/auth/')({
 function RouteComponent() {
   return (
     <>
-      <LoginPage />
+      <SettingsProvider>
+        <LoginPage />
+      </SettingsProvider>
     </>
   );
 }

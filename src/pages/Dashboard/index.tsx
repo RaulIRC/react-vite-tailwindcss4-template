@@ -19,7 +19,11 @@ export const Dashboard = () => {
     // Monthly budget state, default to 600
     const navigate = useNavigate();
 
-    const monthlyBudget = settingsConfig?.[0]?.monthlyBudget || 600; // Default budget is 600 if not set
+    const userName = settingsConfig?.[0]?.userName ?? '';
+
+    const monthlyBudget = settingsConfig?.[0]?.monthlyBudget; // Default budget is 600 if not set
+
+    // console.log(settingsConfig)
     // Function to calculate and display the total amount from records
     const getTotalAmount = () => {
       return records.reduce((sum, record) => sum + Number(record.amount || 0), 0).toFixed(2);
@@ -54,7 +58,7 @@ export const Dashboard = () => {
             <div className="card bg-base-200 shadow-xl">
             <div className="card-body">
                 <h1 className="card-title text-2xl font-bold flex justify-center my-4">
-                Welcome {user?.displayName}! Here Are Your Finances:
+                Welcome {userName}! Here Are Your Finances:
                 </h1>
                 {/* <PieChart /> */}
                 <PieChart />

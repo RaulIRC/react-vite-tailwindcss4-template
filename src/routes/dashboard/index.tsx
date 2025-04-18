@@ -9,6 +9,7 @@ export const Route = createFileRoute('/dashboard/')({
 })
 
 function Dashboard() {
+  
   return (
     <div>
       <SettingsProvider>

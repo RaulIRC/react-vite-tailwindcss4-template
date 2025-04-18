@@ -1,9 +1,11 @@
 // AuthLogic.tsx (Functionality)
 import { signInWithPopup, signInWithEmailAndPassword, createUserWithEmailAndPassword, GoogleAuthProvider } from 'firebase/auth';
-import { auth, authProvider, db, analytics } from "../../firebase/firebaseConfig"; // Firebase auth and db configuration file
+import { auth, provider, analytics } from "../../firebase/firebaseConfig"; // Firebase auth and db configuration file
 import { useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
-import { logEvent } from "firebase/analytics";
+import { logEvent, settings } from "firebase/analytics";
+import { useSettingsConfig, defaultSettingsConfig } from '../formContext/financial-record-context';
+import { useAuthState } from 'react-firebase-hooks/auth';
 
 export const useAuthLogic = () => {
   // State variables for managing authentication and user data
@@ -14,8 +16,27 @@ export const useAuthLogic = () => {
   const [confirmPassword, setConfirmPassword] = useState(""); // State for confirming password
   const navigate = useNavigate();
 
+  const [user] = useAuthState(auth);
+  const userID = user?.uid || ""; 
+
   const isAnalyticsEnabled = useState<boolean>(true);
 
+  // We will be calling on this when we detect that there is no config. to apply default settings.
+
+  const { settingsConfig, createSettingsConfig } = useSettingsConfig(); // State to hold settings configuration
+  const id = settingsConfig?.[0]?._id ?? '';
+  if (id != userID && settingsConfig) {
+    console.log("UserConfigID not matching currentUserUiD")
+    console.log("Creating New Config")
+        const defaultConfig = {
+          userId: auth.currentUser?.uid,
+          monthlyBudget:  600,
+          userName: "",
+          currency: "USD",
+          theme: "synthwave",
+        }
+        createSettingsConfig(defaultConfig);
+  }
   const logAnalyticsEvent = (eventName: string, eventParams: Record<string, any>) => {
     // Function to log events to Firebase Analytics only if it's enabled.
     if (isAnalyticsEnabled) {
@@ -27,7 +48,7 @@ export const useAuthLogic = () => {
   const signInWithGoogle = async () => {
     setAuthing(true); 
 
-    signInWithPopup(auth, authProvider)
+    signInWithPopup(auth, provider)
       .then(async (result) => {
         console.log("Google sign-in successful:", result.user.uid);
         logAnalyticsEvent("login", {
@@ -78,7 +99,7 @@ export const useAuthLogic = () => {
       signInWithPopup(auth, new GoogleAuthProvider())
         .then(async (result) => {
           console.log("Google sign-up successful:", result.user.uid);
-          logAnalyticsEvent("signup", {
+          logAnalyticsEvent("sign_up", {
             method: "Google",
             userID: result.user.uid,
           }); // Log the signup event for analytics
@@ -89,6 +110,7 @@ export const useAuthLogic = () => {
           setError(error.message); // Set the error message to be displayed
         })
         .finally(() => {
+          createSettingsConfig(defaultSettingsConfig);
           setAuthing(false); // Reset the authentication status
         });
   }
@@ -105,7 +127,7 @@ export const useAuthLogic = () => {
     createUserWithEmailAndPassword(auth, email, password)
       .then(async (result) => {
         console.log("Email sign-up successful:", result.user.uid);
-        logAnalyticsEvent("signup", {
+        logAnalyticsEvent("sign_up", {
           method: "Email",
           userID: result.user.uid,
         }); // Log the signup event for analytics
@@ -116,7 +138,6 @@ export const useAuthLogic = () => {
         //   displayName: result.user.displayName || "New User",
         //   photoURL: result.user.photoURL || "",
         // });
-
         navigate({ to: "/dashboard" }); // Redirect to the dashboard after successful signup
       })
       .catch((error) => {
@@ -124,6 +145,7 @@ export const useAuthLogic = () => {
         setError(error.message); // Set the error message to be displayed
       })
       .finally(() => {
+        createSettingsConfig(defaultSettingsConfig);
         setAuthing(false); // Reset the authentication status
       });
   }

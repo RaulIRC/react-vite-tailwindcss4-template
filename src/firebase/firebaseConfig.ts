@@ -41,21 +41,21 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 const provider = new GoogleAuthProvider();
+const remoteConfig = getRemoteConfig(app);
+const analytics = getAnalytics(app);
 
 export { analytics, auth, db, provider, remoteConfig };
 
+// Initialize Remote Config settings
+// This is for later features that might require remote configuration.
 remoteConfig.settings.minimumFetchIntervalMillis = 3600000; // 1 hour
 
 const isFetched = await fetchAndActivate(remoteConfig);
 
 if (isFetched) {
   console.log("Remote config activated and fetched successfully.");
-  const nickname = getValue(remoteConfig, "nickname");
-  const monthlyBudget = getValue(remoteConfig, "monthlyBudget");
   const currency = getValue(remoteConfig, "currency");
   const theme = getValue(remoteConfig, "theme");
-  console.log("Nickname: ", nickname);
-  console.log("Monthly Budget: ", monthlyBudget);
   console.log("Currency: ", currency);
   console.log("Theme: ", theme);
   // Use the fetched values in your application
@@ -65,10 +65,8 @@ else {
 }
 
 remoteConfig.defaultConfig = {
-  nickname: "User",
-  monthlyBudget: 1000,
   currency: "USD",
-  theme: "light",
+  theme: "synthwave",
 }
 
 fetchConfig(remoteConfig);

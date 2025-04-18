@@ -3,8 +3,11 @@ import { auth } from '../../firebase/firebaseConfig';
 import { useNavigate } from '@tanstack/react-router';
 import { useAuthLogic } from '../../contexts/authContext';
 import { useAuthState } from 'react-firebase-hooks/auth';
+import { useSettingsConfig, defaultSettingsConfig } from '../../contexts/formContext/financial-record-context';
+
 
 const LoginPage = () => {
+  
   // Importing authentication logic from the context
   const {
     email,
@@ -16,8 +19,14 @@ const LoginPage = () => {
     createAccountRedirect,
   } = useAuthLogic();
 
-  const [ user ] = useAuthState(auth);
   const navigate = useNavigate();
+  const [ user ] = useAuthState(auth);
+  const  userConfig  = useSettingsConfig();
+  const { createSettingsConfig } = useSettingsConfig();
+
+  if (!userConfig && user) {
+    createSettingsConfig(defaultSettingsConfig)
+  }
 
   if (user) {
     // Redirect to the login page if the user is not logged in
