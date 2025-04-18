@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { getAnalytics, logEvent } from "firebase/analytics";
 import { useLocation as useReactRouterLocation } from '@tanstack/react-router';
+import { useRef as useReactRef } from 'react';
 
 export const Analytics = () => {
     const location = useReactRouterLocation();
@@ -15,10 +16,15 @@ export const Analytics = () => {
         setDebugInfo({ screenName, screenClass });
     };
 
+    const previousPath = useReactRef(location.pathname);
+
     useEffect(() => {
+        if (previousPath.current !== location.pathname) {
+            previousPath.current = location.pathname;
+        }
         const currentPath = location.pathname;
         logScreenView(currentPath, "Analytics");
-    }, [location.pathname]); // Only track changes to the pathname
+    }, [location.pathname, previousPath]); // Only track changes to the pathname
 
     return (
         <>
@@ -44,3 +50,4 @@ export const Analytics = () => {
 };
 
 export default Analytics;
+

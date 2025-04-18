@@ -3,6 +3,7 @@ import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider } from "firebase/auth";
 import { getAnalytics } from "firebase/analytics";
 import { getFirestore } from "firebase/firestore";
+import { getRemoteConfig } from "firebase/remote-config";
 
 // Ensure all required environment variables are defined
 const requiredEnvVars = [
@@ -39,9 +40,10 @@ const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 const auth = getAuth(app);
 const db = getFirestore(app);
-const provider = new GoogleAuthProvider();
+const remoteConfig = getRemoteConfig(app);
+const authProvider = new GoogleAuthProvider();
 
-export { analytics, auth, db, provider };
+export { analytics, auth, db, authProvider, remoteConfig };
 
 // firebase login
 // firebase init

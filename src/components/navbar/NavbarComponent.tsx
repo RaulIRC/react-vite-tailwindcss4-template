@@ -4,16 +4,31 @@ import { Link } from "@tanstack/react-router";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../../firebase/firebaseConfig";
 import AvatarComponent from "../profile/AvatarComponent";
+import { useEffect } from "react";
 
 // Documentation: https://daisyui.com/components/navbar/
 
 // This is considered a "Child Component"
 
-const NavbarComponent = ({ navbarId }: { navbarId: string }) => {
+const NavbarComponent = () => {
 
   const [ user ] = useAuthState(auth); // Replace with your user state management, e.g., useAuthState from Firebase or context.
 
   const isAuth = !!user; // Check if user is authenticated
+
+  const log = (user: any): void => {
+    console.log("Logging user information:", isAuth);
+    console.log("User:", user);
+  };
+
+  useEffect(() => {
+    if (user) {
+      log(user);
+    }
+    else {
+      console.log("No user is authenticated");
+    }
+  }, [user]);
   return (
   <>
   {/* Navbar */}
@@ -61,7 +76,20 @@ const NavbarComponent = ({ navbarId }: { navbarId: string }) => {
                   {!user ? (
                   <Link to="/auth">Login</Link>
                   ) : (
-                  <Link to="/" onClick={() => auth.signOut()}>Logout</Link>
+                    <Link
+                    to="/"
+                    onClick={async () => {
+                      try {
+                      await auth.signOut(); // Sign out the user using Firebase auth
+                      // Optionally, you can redirect or show a message after sign out
+                      console.log("User signed out successfully");
+                      } catch (error) {
+                      console.error("Error signing out:", error);
+                      }
+                    }}
+                    >
+                    Logout
+                    </Link>
                   )}
                 </li>
                 </ul>

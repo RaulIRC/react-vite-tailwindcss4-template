@@ -1,8 +1,8 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { Dashboard as DashboardComponent } from '../../pages/Dashboard' // Import the actual component for the dashboard\
 // import AltDashboard from '../../pages/Dashboard/altindex'
-import { FinancialRecordsProvider } from '../../contexts/formContext/financial-record-context'
-import { MonthlyBudgetProvider } from '../../contexts/monthlyContext/monthlyContext'
+import { FinancialRecordsProvider, SettingsProvider } from '../../contexts/formContext/financial-record-context'
+import AuthRoute from '../../components/auth/auth'
 
 export const Route = createFileRoute('/dashboard/')({
   component: Dashboard,
@@ -11,11 +11,11 @@ export const Route = createFileRoute('/dashboard/')({
 function Dashboard() {
   return (
     <div>
-      <MonthlyBudgetProvider>
+      <SettingsProvider>
         <FinancialRecordsProvider>
-          <DashboardComponent />
+          <AuthRoute><DashboardComponent /></AuthRoute>
         </FinancialRecordsProvider>
-      </MonthlyBudgetProvider>
+      </SettingsProvider>
     </div>
   )
 }

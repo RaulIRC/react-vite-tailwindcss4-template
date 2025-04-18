@@ -1,23 +1,22 @@
-import { useEffect } from 'react';
+import bowsvg from '../../assets/bow.svg';
+import { auth } from '../../firebase/firebaseConfig';
 import { useNavigate } from '@tanstack/react-router';
 import { useAuthLogic } from '../../contexts/authContext';
-import bowsvg from '../../assets/bow.svg';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { auth } from '../../firebase/firebaseConfig';
 
-const LoginComponent = () => {
+const LoginPage = () => {
+  // Importing authentication logic from the context
   const {
     email,
-    setEmail,
     password,
+    setEmail,
     setPassword,
     signInWithGoogle,
-    handleLogin,
-    handleClick,
+    signInWithEmail,
+    createAccountRedirect,
   } = useAuthLogic();
 
-  const [user, loading] = useAuthState(auth);
-
+  const [ user ] = useAuthState(auth);
   const navigate = useNavigate();
 
   if (user) {
@@ -41,7 +40,10 @@ const LoginComponent = () => {
             </div>
           <div className="card-body">
             <h2 className="card-title self-center">Login</h2>
-            <form onSubmit={handleLogin}>
+            <form onSubmit={(e) => {
+              e.preventDefault();
+              signInWithEmail(email, password);
+            }}>
               <div className="form-control">
                 <label className="label">
                   <span className="label-text">Email address</span>
@@ -77,7 +79,7 @@ const LoginComponent = () => {
               <label className="label flex justify-center">
                 <span className="label-text">New User?</span>
               </label>
-              <button onClick={handleClick} className="btn btn-secondary">
+              <button onClick={createAccountRedirect} className="btn btn-secondary">
                 Create an account
               </button>
             </div>
@@ -95,4 +97,4 @@ const LoginComponent = () => {
   );
 };
 
-export default LoginComponent;
+export default LoginPage;

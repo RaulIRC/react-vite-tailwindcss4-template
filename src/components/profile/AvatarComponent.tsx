@@ -1,10 +1,12 @@
-import React from 'react'
-import { useGetUserInfo } from '../../hooks/useGetUserInfo';
+import { auth } from '../../firebase/firebaseConfig' // Adjust the import path as necessary
+import { useAuthState } from "react-firebase-hooks/auth";
+
 
 const AvatarComponent = ({ userName, isAuth }: { userName: string; isAuth: boolean }) => {
-    const { profilePhoto } = useGetUserInfo(); // Assuming useGetUserInfo is a hook that provides user profile data
+    const [ user ] = useAuthState(auth);
+    const profilePhoto = user?.photoURL || ''; // Get the user's profile photo URL
 
-    if (!isAuth) {
+    if (!isAuth || !profilePhoto) {
         return (
             <div className="avatar avatar-online avatar-placeholder">
                 <div className="bg-neutral text-neutral-content w-12 h-12 rounded-full flex items-center justify-center overflow-hidden">
@@ -31,7 +33,13 @@ const AvatarComponent = ({ userName, isAuth }: { userName: string; isAuth: boole
     }
 
     return (
-        <></>
+        <>
+            <div className="avatar avatar-online avatar-placeholder">
+                <div className="bg-neutral text-neutral-content w-12 h-12 rounded-full flex items-center justify-center overflow-hidden">
+                    <span className="loading loading-spinner loading-lg text-primary"></span>
+                </div>
+            </div>
+        </>
     );
 };
 

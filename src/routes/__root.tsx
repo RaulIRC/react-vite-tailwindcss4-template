@@ -1,6 +1,8 @@
 import { createRootRoute, Outlet } from '@tanstack/react-router'
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools';
 import NavbarComponent from '../components/navbar/NavbarComponent';
+import Analytics from '../components/analytics/analytics';
+import AuthRoute from '../components/auth/auth';
 
 // Making this the nav bar that is the drawer 
 //to always have it available while loading each page would be a cool idea.
@@ -17,20 +19,21 @@ function rootNav() {
 
   return (
     <>
-    <div className="bg-[url('cloudy.svg')] bg-cover bg-center min-h-screen">
-        {/* Navbar can go here */}
-      <header className="navbar-container sticky top-0 z-50 bg-base-100 p-4 gap-2">
-        <div className="flex gap-2 justify-center rounded-2xl">
-          <NavbarComponent navbarId={navbarId} />
+        <div className="bg-[url('cloudy.svg')] bg-cover bg-center min-h-screen">
+          {/* Navbar can go here */}
+          <header className="navbar-container sticky top-0 z-50 bg-base-100 p-4 gap-2">
+            <div className="flex gap-2 justify-center rounded-2xl">
+              <NavbarComponent />
+            </div>
+          </header>
+            {/* Drawer component for mobile view */}  
+          <div className="mt-6 px-4">
+            {/* <hr /> Component Divider */}
+            <Outlet /> {/* Outlet renders the given route page here.*/}
+          </div>
+          {/* <TanStackRouterDevtools /> */}
+          <Analytics /> Analytics component for tracking page views
         </div>
-      </header>
-      {/* Drawer component for mobile view */}  
-      <div className="mt-6 px-4">
-        {/* <hr /> Component Divider */}
-        <Outlet /> {/* Outlet renders the given route page here.*/}
-      </div>
-      {/* <TanStackRouterDevtools /> */}
-      </div>
     </>
   )
 }

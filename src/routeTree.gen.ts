@@ -15,6 +15,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { Route as rootRoute } from './routes/__root'
 import { Route as IndexImport } from './routes/index'
 import { Route as SettingsIndexImport } from './routes/settings/index'
+import { Route as RegisterIndexImport } from './routes/register/index'
 import { Route as PostsIndexImport } from './routes/posts/index'
 import { Route as DashboardIndexImport } from './routes/dashboard/index'
 import { Route as AuthIndexImport } from './routes/auth/index'
@@ -41,6 +42,12 @@ const IndexRoute = IndexImport.update({
 const SettingsIndexRoute = SettingsIndexImport.update({
   id: '/settings/',
   path: '/settings/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const RegisterIndexRoute = RegisterIndexImport.update({
+  id: '/register/',
+  path: '/register/',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -114,6 +121,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PostsIndexImport
       parentRoute: typeof rootRoute
     }
+    '/register/': {
+      id: '/register/'
+      path: '/register'
+      fullPath: '/register'
+      preLoaderRoute: typeof RegisterIndexImport
+      parentRoute: typeof rootRoute
+    }
     '/settings/': {
       id: '/settings/'
       path: '/settings'
@@ -133,6 +147,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthIndexRoute
   '/dashboard': typeof DashboardIndexRoute
   '/posts': typeof PostsIndexRoute
+  '/register': typeof RegisterIndexRoute
   '/settings': typeof SettingsIndexRoute
 }
 
@@ -143,6 +158,7 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthIndexRoute
   '/dashboard': typeof DashboardIndexRoute
   '/posts': typeof PostsIndexRoute
+  '/register': typeof RegisterIndexRoute
   '/settings': typeof SettingsIndexRoute
 }
 
@@ -154,6 +170,7 @@ export interface FileRoutesById {
   '/auth/': typeof AuthIndexRoute
   '/dashboard/': typeof DashboardIndexRoute
   '/posts/': typeof PostsIndexRoute
+  '/register/': typeof RegisterIndexRoute
   '/settings/': typeof SettingsIndexRoute
 }
 
@@ -166,6 +183,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/dashboard'
     | '/posts'
+    | '/register'
     | '/settings'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -175,6 +193,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/dashboard'
     | '/posts'
+    | '/register'
     | '/settings'
   id:
     | '__root__'
@@ -184,6 +203,7 @@ export interface FileRouteTypes {
     | '/auth/'
     | '/dashboard/'
     | '/posts/'
+    | '/register/'
     | '/settings/'
   fileRoutesById: FileRoutesById
 }
@@ -195,6 +215,7 @@ export interface RootRouteChildren {
   AuthIndexRoute: typeof AuthIndexRoute
   DashboardIndexRoute: typeof DashboardIndexRoute
   PostsIndexRoute: typeof PostsIndexRoute
+  RegisterIndexRoute: typeof RegisterIndexRoute
   SettingsIndexRoute: typeof SettingsIndexRoute
 }
 
@@ -205,6 +226,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthIndexRoute: AuthIndexRoute,
   DashboardIndexRoute: DashboardIndexRoute,
   PostsIndexRoute: PostsIndexRoute,
+  RegisterIndexRoute: RegisterIndexRoute,
   SettingsIndexRoute: SettingsIndexRoute,
 }
 
@@ -224,6 +246,7 @@ export const routeTree = rootRoute
         "/auth/",
         "/dashboard/",
         "/posts/",
+        "/register/",
         "/settings/"
       ]
     },
@@ -244,6 +267,9 @@ export const routeTree = rootRoute
     },
     "/posts/": {
       "filePath": "posts/index.tsx"
+    },
+    "/register/": {
+      "filePath": "register/index.tsx"
     },
     "/settings/": {
       "filePath": "settings/index.tsx"

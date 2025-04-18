@@ -1,22 +1,36 @@
 import * as React from 'react'
-import { useFinancialRecords } from '../../contexts/formContext/financial-record-context';
+import { useSettingsConfig } from '../../contexts/formContext/financial-record-context';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { auth } from '../../firebase/firebaseConfig';
 
 export const Settings = () => {
-  const [ originalBudget, setOriginalBudget ] = React.useState<number>(600) // Default budget is 600
-  const { setMonthlyBudget } = useFinancialRecords();
+  const [ newBudget, setNewBudget ] = React.useState<number>() // Default budget is 600
+  const [ userName, setUserName ] = React.useState<string>("") // State for the username
+  const { settingsConfig, updateSettingsConfig } = useSettingsConfig();
+  const [ user ] = useAuthState(auth);
 
-  // Handler for updating monthly budget
+  // Handler for updating the settings configuration.
   const handleSubmit = (event: React.MouseEvent<HTMLButtonElement>) => {
-    event.preventDefault()
-    setMonthlyBudget(originalBudget) // Update the budget with the current state value
-  }
+    event.preventDefault();
+    handleUpdateSettingsConfig();
+  };
 
-  React.useEffect(() => {
-    const savedBudget = localStorage.getItem('monthlyBudget') // Retrieve the budget from local storage
-    if (savedBudget) {
-      setOriginalBudget(parseInt(savedBudget)) // Set the original budget state from local storage
+  const handleUpdateSettingsConfig = () => {
+    const updateConfig = {
+      userId: user?.uid ?? '',
+      monthlyBudget: newBudget ?? 600, // Ensure monthlyBudget is always a number
+      userName: userName || user?.displayName || '', // Ensure userName is always a string
+    };
+
+    const id = settingsConfig?.[0]?._id ?? ''; // Ensure id is always a string
+    if (id) {
+      updateSettingsConfig(id, updateConfig); // Update settings configuration with the correct arguments
+      setNewBudget(0); // Reset the budget input field after submission
+      setUserName(''); // Reset the username input field after submission
+    } else {
+      console.error('No valid settingsConfig ID found.');
     }
-  }, [])  // Set the original budget state from local storage on component mount
+  };
 
   return (
     <div className="p-4 mt-16">
@@ -36,8 +50,8 @@ export const Settings = () => {
             <input
             type="number"
             min={0}
-            value={originalBudget}
-            onChange={(e) => setOriginalBudget(Number(e.target.value))}
+            value={newBudget}
+            onChange={(event) => setNewBudget(Number(event.target.value))}
             placeholder="Enter monthly budget"
             className="input input-bordered w-full mb-4"
             />

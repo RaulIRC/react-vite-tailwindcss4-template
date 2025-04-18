@@ -1,6 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
 import Settings from '../../pages/Settings'
-import { FinancialRecordsProvider } from '../../contexts/formContext/financial-record-context'
+import { SettingsProvider } from '../../contexts/formContext/financial-record-context'
+import AuthRoute from '../../components/auth/auth'
 
 export const Route = createFileRoute('/settings/')({
   component: SettingsComponent,
@@ -9,9 +10,9 @@ export const Route = createFileRoute('/settings/')({
 function SettingsComponent() {
   return (
     <>
-    <FinancialRecordsProvider>
-      <Settings />
-    </FinancialRecordsProvider>
+      <SettingsProvider>
+        <AuthRoute><Settings /></AuthRoute>
+      </SettingsProvider>
     </>
   )
 }

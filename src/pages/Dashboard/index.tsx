@@ -3,33 +3,27 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import { useEffect, useState } from 'react';
 import { useNavigate } from "@tanstack/react-router";
 import { FinancialRecordForm } from "../../components/financialrecord/financial-record-form"; // Financial Record Form Component
-// import { FinancialRecordList } from "../../components/financialrecord/financial-record-list";
 import PieChart from "../../components/PieChart";
 import { ListComponent } from "../../components/list/ListComponent";
-import { useFinancialRecords } from "../../contexts/formContext/financial-record-context";
+import { useFinancialRecords, useSettingsConfig } from "../../contexts/formContext/financial-record-context";
 
 // Expense Tracker
 
 export const Dashboard = () => {
     
     const [user, loading, error] = useAuthState(auth);
-    const { records, monthlyBudget } = useFinancialRecords();
+
+    const { settingsConfig } = useSettingsConfig();
+    const { records } = useFinancialRecords();
     const [showForm, setShowForm] = useState(false);
     // Monthly budget state, default to 600
     const navigate = useNavigate();
 
+    const monthlyBudget = settingsConfig?.[0]?.monthlyBudget || 600; // Default budget is 600 if not set
     // Function to calculate and display the total amount from records
     const getTotalAmount = () => {
       return records.reduce((sum, record) => sum + Number(record.amount || 0), 0).toFixed(2);
     };
-
-    // const addExpense = (amount, description) => {
-    //     if (currentTotal + amount <= monthlyBudget) {
-    //         setCurrentTotal(currentTotal + amount);
-    //     } else {
-    //         alert("Expense exceeds monthly budget limit!");
-    //     }
-    // }
 
     useEffect(() => {
         if (!loading && !user) {
