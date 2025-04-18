@@ -1,45 +1,10 @@
 @import "tailwindcss";
+@plugin "./components/heroui/hero.ts"
+@source "./components/**/*.{js,ts,jsx,tsx,mdx}", "./app/**/*.{js,ts,jsx,tsx,mdx}", "./node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}";
+@custom-variant dark (&:is(.dark *));
 @plugin "daisyui" {
   themes: synthwave --default;
 }
-
-
-@plugin "daisyui/theme" {
-  name: "Budget4FreeTheme";
-  default: false;
-  prefersdark: false;
-  color-scheme: "light";
-  --color-base-100: oklch(0.95 0.0103 261.79);
-  --color-base-200: oklch(0.93 0.0103 261.79);
-  --color-base-300: oklch(0.90 0.0103 261.79);
-  --color-base-content: oklch(21% 0.006 285.885);
-  --color-primary: oklch(0.59 0.0351 244.06);
-  --color-primary-content: oklch(93% 0.034 272.788);
-  --color-secondary: oklch(0.57 0.0692 253.93);
-  --color-secondary-content: oklch(94% 0.028 342.258);
-  --color-accent: oklch(0.52 0.137 266.49);
-  --color-accent-content: oklch(38% 0.063 188.416);
-  --color-neutral: oklch(0.34 0.0111 67.45);
-  --color-neutral-content: oklch(92% 0.004 286.32);
-  --color-info: oklch(0.48 0.145 284.41);
-  --color-info-content: oklch(93% 0.034 272.788);
-  --color-success: oklch(0.4 0.1567 289.22);
-  --color-success-content: oklch(93% 0.034 272.788);
-  --color-warning: oklch(82% 0.189 84.429);
-  --color-warning-content: oklch(41% 0.112 45.904);
-  --color-error: oklch(71% 0.194 13.428);
-  --color-error-content: oklch(27% 0.105 12.094);
-  --radius-selector: 0.5rem;
-  --radius-field: 0.25rem;
-  --radius-box: 0.5rem;
-  --size-selector: 0.25rem;
-  --size-field: 0.25rem;
-  --border: 1px;
-  --depth: 1;
-  --noise: 0;
-  --bg-custom-bg: "url('../../assets/abstract-bg.svg')";
-}
-
 
 
 
