@@ -12,6 +12,7 @@ import {
 } from "../contexts/formContext/financial-record-context";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Pie } from 'react-chartjs-2'
+import ErrorAlert from "./alert/ErrorAlert";
 
 ChartJS.register(ArcElement, Tooltip, Legend );
 
@@ -97,10 +98,12 @@ const ChartComponent = () => {
 
     return (
         <>
-        <div style={{ display: "flex", flexWrap:"wrap", justifyContent: "center", maxHeight: 500 }}>
+        <div className="flex flex-wrap justify-center max-h-[500px]">
             {/* check if there is data */}
             { data.datasets[0].data.every(item=>item===0) ? (
-                <label>Add an expense using the form below to see your report!</label>
+                <label>
+                    <ErrorAlert title="No Data Found" message="Please enter a new entry to start your journey."/>
+                </label>
             ):(
                 <Pie data={data} options={options}/> 
             )}
