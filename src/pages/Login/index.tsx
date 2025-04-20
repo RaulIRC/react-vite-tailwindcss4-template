@@ -21,12 +21,7 @@ const LoginPage = () => {
 
   const navigate = useNavigate();
   const [ user ] = useAuthState(auth);
-  const  userConfig  = useSettingsConfig();
-  const { createSettingsConfig } = useSettingsConfig();
-
-  if (!userConfig && user) {
-    createSettingsConfig(defaultSettingsConfig)
-  }
+  
 
   if (user) {
     // Redirect to the login page if the user is not logged in

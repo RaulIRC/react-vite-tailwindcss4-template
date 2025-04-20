@@ -24,18 +24,10 @@ export const useAuthLogic = () => {
   // We will be calling on this when we detect that there is no config. to apply default settings.
 
   const { settingsConfig, createSettingsConfig } = useSettingsConfig(); // State to hold settings configuration
-  const id = settingsConfig?.[0]?._id ?? '';
-  if (id != userID && settingsConfig) {
-    console.log("UserConfigID not matching currentUserUiD")
-    console.log("Creating New Config")
-        const defaultConfig = {
-          userId: auth.currentUser?.uid,
-          monthlyBudget:  600,
-          userName: "",
-          currency: "USD",
-          theme: "synthwave",
-        }
-        createSettingsConfig(defaultConfig);
+
+  const handleSettingsConfig = (settingsConfig: SettingsConfig[] | ,undefined, userID: string, createSettingsConfig: (config: SettingsConfig) => void, auth: any) => {
+    const id = settingsConfig?.[0]?._id ?? '';
+    if (!settingsConfig || id === userID)
   }
   const logAnalyticsEvent = (eventName: string, eventParams: Record<string, any>) => {
     // Function to log events to Firebase Analytics only if it's enabled.
