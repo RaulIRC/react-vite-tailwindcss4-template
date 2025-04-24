@@ -43,7 +43,7 @@ const NavbarComponent = () => {
             </div>
           <div className="flex gap-2">
             <div className="dropdown dropdown-end ">
-              <button>
+              <button tabIndex={0}>
                 <AvatarComponent userName={user?.displayName ?? "User"} isAuth={isAuth} />
               </button>
               {/* This is where the dropdown menu starts */}
