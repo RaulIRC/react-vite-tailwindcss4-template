@@ -3,8 +3,8 @@ import { signInWithPopup, signInWithEmailAndPassword, createUserWithEmailAndPass
 import { auth, provider, analytics } from "../../firebase/firebaseConfig"; // Firebase auth and db configuration file
 import { useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
-import { logEvent, settings } from "firebase/analytics";
-import { useSettingsConfig, defaultSettingsConfig } from '../formContext/financial-record-context';
+import { logEvent } from "firebase/analytics";
+import { useSettingsConfig, SettingsConfig } from "../../contexts/settingsContext/settingsContext"; // Importing the settings context
 import { useAuthState } from 'react-firebase-hooks/auth';
 
 export const useAuthLogic = () => {
@@ -16,19 +16,33 @@ export const useAuthLogic = () => {
   const [confirmPassword, setConfirmPassword] = useState(""); // State for confirming password
   const navigate = useNavigate();
 
-  const [user] = useAuthState(auth);
-  const userID = user?.uid || ""; 
-
   const isAnalyticsEnabled = useState<boolean>(true);
 
   // We will be calling on this when we detect that there is no config. to apply default settings.
 
-  const { settingsConfig, createSettingsConfig } = useSettingsConfig(); // State to hold settings configuration
+  const { settingsConfig, createConfig } = useSettingsConfig(); // State to hold settings configuration
 
-  const handleSettingsConfig = (settingsConfig: SettingsConfig[] | ,undefined, userID: string, createSettingsConfig: (config: SettingsConfig) => void, auth: any) => {
-    const id = settingsConfig?.[0]?._id ?? '';
-    if (!settingsConfig || id === userID)
-  }
+
+
+  const [user] = useAuthState(auth);
+  const userID = user?.uid || ""; 
+
+  // const handleSettingsConfig = () => {
+  //   console.log("Settings Config Check ", settingsConfig);
+
+  //   if (settingsConfig[0]?.userId === userID) {
+  //     const newConfig: SettingsConfig = {
+  //       userId: user?.uid ?? "",
+  //       monthlyBudget: 600,
+  //       userName: '',
+  //       currency: '',
+  //       theme: ''
+  //     }; // Initialize with userID.
+  //     console.log("Creating new settings config:", newConfig);
+  //     createConfig(newConfig); // Create default settings config
+  //   }
+  // }
+  
   const logAnalyticsEvent = (eventName: string, eventParams: Record<string, any>) => {
     // Function to log events to Firebase Analytics only if it's enabled.
     if (isAnalyticsEnabled) {
@@ -36,6 +50,30 @@ export const useAuthLogic = () => {
     }
   };
 
+  // const handleAuth = async (authAction: (email: string, password: string) => Promise<any>, method: string) => {
+  //   setAuthing(true);
+  //   setError('');
+
+  //   try {
+  //     const result = await authAction(email, password);
+  //     console.log({method}, 'successful:', result.user.uid);
+  //     logAnalyticsEvent("login", {
+  //       method: method,
+  //       userID: result.user.uid
+  //     })
+  //   } catch (error) {
+  //     if (error instanceof Error) {
+  //       setError(error.message);
+  //     } else {
+  //       setError(String(error));
+  //     }
+  //     console.error({method}, 'authentication failed:', error);
+  //     setAuthing(false); // Consider adding this
+  //   } finally {
+  //     // Optional: Code that always runs, regardless of success or failure
+  //     // setAuthing(false); // Alternatively, you could put it here
+  //   }
+  // }
   /* Login Page Logic */
   const signInWithGoogle = async () => {
     setAuthing(true); 
@@ -54,6 +92,7 @@ export const useAuthLogic = () => {
       setError(error.message); // Set the error message to be displayed
     })
     .finally(() => {
+      // handleSettingsConfig();
       setAuthing(false); // Reset the authentication status
     });
   };
@@ -77,6 +116,7 @@ export const useAuthLogic = () => {
         setError(error.message); // Set the error message to be displayed
       })
       .finally(() => {
+        // handleSettingsConfig();
         setAuthing(false); // Reset the authentication status
       });
   };
@@ -102,7 +142,7 @@ export const useAuthLogic = () => {
           setError(error.message); // Set the error message to be displayed
         })
         .finally(() => {
-          createSettingsConfig(defaultSettingsConfig);
+          // handleSettingsConfig();
           setAuthing(false); // Reset the authentication status
         });
   }
@@ -122,14 +162,7 @@ export const useAuthLogic = () => {
         logAnalyticsEvent("sign_up", {
           method: "Email",
           userID: result.user.uid,
-        }); // Log the signup event for analytics
-        
-        // // Store user data in Firestore
-        // await db.collection("Users").doc(result.user.uid).set({
-        //   email: result.user.email,
-        //   displayName: result.user.displayName || "New User",
-        //   photoURL: result.user.photoURL || "",
-        // });
+        });
         navigate({ to: "/dashboard" }); // Redirect to the dashboard after successful signup
       })
       .catch((error) => {
@@ -137,7 +170,7 @@ export const useAuthLogic = () => {
         setError(error.message); // Set the error message to be displayed
       })
       .finally(() => {
-        createSettingsConfig(defaultSettingsConfig);
+        // handleSettingsConfig(); // Call the function to handle settings configuration
         setAuthing(false); // Reset the authentication status
       });
   }
@@ -184,11 +217,11 @@ export const useAuthLogic = () => {
 //     }
 // }
 
-  const createAccountRedirect = () => {
-    navigate({
-      to: "/register", // Redirect to the signup page for new users
-    });
-  };
+  // const createAccountRedirect = () => {
+  //   navigate({
+  //     to: "/register", // Redirect to the signup page for new users
+  //   });
+  // };
 
   return {
     authing,
@@ -205,6 +238,6 @@ export const useAuthLogic = () => {
     setConfirmPassword,
     signInWithGoogle,
     signInWithEmail,
-    createAccountRedirect,
+    userID,
   };
 };

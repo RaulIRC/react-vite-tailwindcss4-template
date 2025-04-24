@@ -9,7 +9,7 @@ import { addDoc,
     deleteDoc,
 } from "firebase/firestore";
 import { auth, db } from "../../firebase/firebaseConfig"; // Firebase auth and db configuration file
-import { createContext, useState, useEffect, useContext, useCallback, useMemo } from "react";
+import { createContext, useState, useEffect, useContext } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 
 // We are getting the db information from this tsx class.
@@ -17,133 +17,6 @@ import { useAuthState } from "react-firebase-hooks/auth";
 
 // SettingsRecord interface to define the structure of settings data
 
-export interface SettingsConfig {
-    _id?: string;
-    userId?: string;
-    monthlyBudget: number; // Monthly budget amount
-    userName: string; // User's name or nickname
-    currency: string; // Currency type, e.g., USD, EUR
-    theme: string; // Theme preference, e.g., light, dark
-  }
-
-export const defaultSettingsConfig: SettingsConfig = {
-    userId: auth.currentUser?.uid || "", // Default user ID is the current user's ID
-    monthlyBudget: 600, // Default budget is 600
-    userName: "", // Default username is empty
-    currency: "USD", // Default currency is USD
-    theme: "synthwave", // Default theme is synthwave
-  };
-
-interface SettingsContextType {
-    settingsConfig: SettingsConfig[]; // Settings record for the user
-    createSettingsConfig: (settings: SettingsConfig) => void; // Function to update the settings record
-    updateSettingsConfig: (id: string, newSettings: SettingsConfig) => void; // Function to update the settings record
-}
-
-export const SettingsContext = createContext<SettingsContextType | undefined>(undefined);
-
-
-export const SettingsProvider = ({children, }: {children: React.ReactNode;}) => {
-    const [settingsConfig, setSettingsConfig] = useState<SettingsConfig[]>([]);
-    const [user] = useAuthState(auth);
-    const userID = user?.uid || ""; // Get user ID from auth state, or set to empty string if not authenticated
-    const settingsConfigRef = collection(db, "Settings");
-
-    const fetchSettingsConfig =  useCallback(async () => {
-        if (!userID) return;
-        try {
-            const reConfig = query(settingsConfigRef, where("userID", "==", userID));
-            const querySnapshot = await getDocs(reConfig);
-            const fetchedSettings: SettingsConfig[] = querySnapshot.docs.map((doc) => {
-                const data = doc.data();
-                return {
-                    _id: doc.id,
-                    userId: data.userID,
-                    monthlyBudget: data.monthlyBudget,
-                    userName: data.userName,
-                    currency: data.currency || "USD", // Default to USD if currency is not set
-                    theme: data.theme || "synthwave", // Default to synthwave if theme is not set
-                };
-            });
-            setSettingsConfig(fetchedSettings);
-            // console.log("Config has been Fetched!", fetchedSettings)
-        } catch (error) {
-            console.error("Error fetching settings: ", error);
-            alert("Error fetching settings. Please try again later.");
-        }
-    }, [settingsConfigRef, userID]);
-
-    useEffect(() => {
-        fetchSettingsConfig();
-    }, [fetchSettingsConfig]);
-
-    const createSettingsConfig = useCallback(async (settingsConfig: SettingsConfig) => {
-        if (!userID) {
-            console.error("User ID is not available, cannot apply settings.");
-            alert("User not authenticated. Please log in.");
-            return;
-        }
-        try {
-            await addDoc(settingsConfigRef, {
-                userID,
-                monthlyBudget: settingsConfig.monthlyBudget,
-                userName: settingsConfig.userName,
-                currency: settingsConfig.currency,
-                theme: settingsConfig.theme,
-            });
-            fetchSettingsConfig(); // Refresh records after adding
-            alert("Settings Config Successfully Created");
-        } catch (error) {
-            console.error("Error creating settings config: ", error);
-            alert("Error creating config");
-        }
-    }, [settingsConfigRef, userID, fetchSettingsConfig]);
-
-    const updateSettingsConfig = useCallback(async (id: string, newSettings: SettingsConfig) => {
-        if (!userID) return;
-        try {
-            // Reference to the document to be updated
-            const settingsRef = doc(settingsConfigRef, id);
-            // Update the document with new data
-            await updateDoc(settingsRef, {
-                userName: newSettings.userName,
-                monthlyBudget: newSettings.monthlyBudget,
-                currency: newSettings.currency, // If you have a currency field
-                theme: newSettings.theme, // If you have a theme field
-            });
-            fetchSettingsConfig(); // Refresh records after updating
-            alert("Settings updated successfully");
-        } catch (error) {
-            console.error("Error updating document: ", error);
-            alert("Error updating settings config");
-        }
-    }, [settingsConfigRef, userID, fetchSettingsConfig]);
-
-    const contextValue = useMemo(() => ({
-        settingsConfig: settingsConfig,
-        createSettingsConfig: createSettingsConfig,
-        updateSettingsConfig: updateSettingsConfig
-    }), [settingsConfig, createSettingsConfig, updateSettingsConfig])
-
-    return (
-        <SettingsContext.Provider 
-          value={contextValue}
-        >
-            {children}
-        </SettingsContext.Provider>
-    );
-}
-
-export const useSettingsConfig = () => {
-    const context = useContext<SettingsContextType | undefined>(SettingsContext);
-
-    if (!context) {
-        throw new Error(
-            "useSettingsConfig must be used within a SettingsProvider"
-        );
-    }
-    return context;
-}
 
 // This is the start of the Financial Records Context
 // Todo: Simplify the overly complicated mess I made. - @RaulIRC

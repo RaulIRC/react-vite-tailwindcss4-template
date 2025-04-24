@@ -5,23 +5,31 @@ import { useNavigate } from "@tanstack/react-router";
 import { FinancialRecordForm } from "../../components/financialrecord/financial-record-form"; // Financial Record Form Component
 import PieChart from "../../components/PieChart";
 import { ListComponent } from "../../components/list/ListComponent";
-import { useFinancialRecords, useSettingsConfig } from "../../contexts/formContext/financial-record-context";
+import { useFinancialRecords } from "../../contexts/formContext/financial-record-context";
+import { useSettingsConfig } from "../../contexts/settingsContext/settingsContext";
 
 // Expense Tracker
+
+// Bug to checkout. Something inside the useSettingsConfig() is causing the app to refresh multiple times a second for an indefinite loop.
 
 export const Dashboard = () => {
     
     const [user, loading, error] = useAuthState(auth);
 
+    // Enabling this causes the app to loop refreshing indefinitely more than usual but when
+    // disabled, it still does refresh, Specifically the settings provider.
     const { settingsConfig } = useSettingsConfig();
     const { records } = useFinancialRecords();
     const [showForm, setShowForm] = useState(false);
     // Monthly budget state, default to 600
     const navigate = useNavigate();
 
-    const userName = settingsConfig?.[0]?.userName ?? '';
 
-    const monthlyBudget = settingsConfig?.[0]?.monthlyBudget; // Default budget is 600 if not set
+    // const userName2 = useState<string>(settingsConfig?.[0]?.userName ?? user?.displayName); // Default to "User" if not set
+    const userName = settingsConfig?.[0]?.userName ?? user?.displayName; // Default to "User" if not set
+    // const userName = user?.displayName || "User"; // Default to "User" if not set
+    // const monthlyBudget = 600; // Default budget is 600 if not set
+    const monthlyBudget = settingsConfig?.[0]?.monthlyBudget // Default budget is 600 if not set
 
     // console.log(settingsConfig)
     // Function to calculate and display the total amount from records
@@ -30,7 +38,7 @@ export const Dashboard = () => {
     };
 
     useEffect(() => {
-        if (!loading && !user) {
+        if (!user) {
             // Redirect to the login page if the user is not logged in
             navigate({
                 to: '/auth', // Redirect to login page
@@ -60,9 +68,8 @@ export const Dashboard = () => {
                     <h1 className="card-title text-2xl font-bold flex justify-center my-4">
                         Welcome {userName}! Here Are Your Finances:
                     </h1>
-                    {/* <PieChart /> */}
                     <div>
-                        {/* <PieChart /> */}
+                        <PieChart />
                     </div>
                     <div className="flex justify-center my-4">
                         <button
@@ -74,7 +81,7 @@ export const Dashboard = () => {
                     </div>
                     {showForm && (
                         <div className="flex justify-center my-4">
-                            {/* <FinancialRecordForm /> */}
+                            <FinancialRecordForm />
                         </div>
                     )}
                     <div className="stats flex justify-center my-4">
@@ -95,7 +102,7 @@ export const Dashboard = () => {
                 </div>
                 <div className="overflow-x-auto my-4">
                     {/* <FinancialRecordList /> */}
-                    {/* <ListComponent description={""} amount={0} category={""} paymentMethod={""} date={""} /> */}
+                    <ListComponent description={""} amount={0} category={""} paymentMethod={""} date={""} />
                 </div>
             </div>
         </div>

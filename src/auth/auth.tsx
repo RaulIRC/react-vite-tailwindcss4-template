@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from '@tanstack/react-router';
-import { auth } from '../../firebase/firebaseConfig'; // Adjust the import path as necessary
+import { auth } from '../firebase/firebaseConfig'; // Adjust the import path as necessary
 import { onAuthStateChanged } from 'firebase/auth';
 
 export interface IAuthProps {

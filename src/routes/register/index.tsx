@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 import RegisterPage from '../../pages/Register'
-import { SettingsProvider } from '../../contexts/formContext/financial-record-context'
+import { SettingsProvider } from '../../contexts/settingsContext/settingsContext';
 
 export const Route = createFileRoute('/register/')({
   component: RegisterComponent,

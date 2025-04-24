@@ -1,8 +1,7 @@
 import { createRootRoute, Outlet } from '@tanstack/react-router'
-import { TanStackRouterDevtools } from '@tanstack/react-router-devtools';
+// import { TanStackRouterDevtools } from '@tanstack/react-router-devtools';
 import NavbarComponent from '../components/navbar/NavbarComponent';
 import Analytics from '../components/analytics/analytics';
-import { HeroUIProvider } from "@heroui/react"
 
 // Making this the nav bar that is the drawer 
 //to always have it available while loading each page would be a cool idea.
@@ -17,7 +16,6 @@ function rootNav() {
 
   return (
     <>
-      <HeroUIProvider>
         <div className="bg-[url('cloudy.svg')] bg-cover bg-center min-h-screen">
           {/* Navbar can go here */}
           <header className="navbar-container sticky top-0 z-50 bg-base-100 p-4 gap-2">
@@ -33,7 +31,6 @@ function rootNav() {
           {/* <TanStackRouterDevtools /> */}
           <Analytics />
         </div>
-      </HeroUIProvider>
     </>
   )
 }

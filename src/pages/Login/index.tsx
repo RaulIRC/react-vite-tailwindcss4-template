@@ -3,7 +3,7 @@ import { auth } from '../../firebase/firebaseConfig';
 import { useNavigate } from '@tanstack/react-router';
 import { useAuthLogic } from '../../contexts/authContext';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { useSettingsConfig, defaultSettingsConfig } from '../../contexts/formContext/financial-record-context';
+// import { useSettingsConfig, defaultSettingsConfig } from '../../contexts/settingsContext/settingsContext';
 
 
 const LoginPage = () => {
@@ -16,7 +16,6 @@ const LoginPage = () => {
     setPassword,
     signInWithGoogle,
     signInWithEmail,
-    createAccountRedirect,
   } = useAuthLogic();
 
   const navigate = useNavigate();
@@ -83,7 +82,9 @@ const LoginPage = () => {
               <label className="label flex justify-center">
                 <span className="label-text">New User?</span>
               </label>
-              <button onClick={createAccountRedirect} className="btn btn-secondary">
+              <button onClick={() => 
+                navigate({ to: '/register' })
+              } className="btn btn-secondary">
                 Create an account
               </button>
             </div>

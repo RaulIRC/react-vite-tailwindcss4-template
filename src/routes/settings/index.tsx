@@ -1,7 +1,7 @@
-import { createFileRoute } from '@tanstack/react-router'
-import Settings from '../../pages/Settings'
-import { SettingsProvider } from '../../contexts/formContext/financial-record-context'
-import AuthRoute from '../../components/auth/auth'
+import { createFileRoute } from '@tanstack/react-router';
+import Settings from '../../pages/Settings';
+import { SettingsProvider } from '../../contexts/settingsContext/settingsContext';
+import AuthRoute from '../../auth/auth';
 
 export const Route = createFileRoute('/settings/')({
   component: SettingsComponent,

@@ -1,7 +1,4 @@
 @import "tailwindcss";
-@plugin "./components/heroui/hero.ts";
-@source "./components/**/*.{js,ts,jsx,tsx,mdx}", "./app/**/*.{js,ts,jsx,tsx,mdx}", "./node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}";
-@custom-variant dark (&:is(.dark *));
 @plugin "daisyui" {
   themes: synthwave --default;
 }
