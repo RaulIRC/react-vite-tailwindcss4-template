@@ -7,7 +7,7 @@ const RegisterPage = () => {
 
     const {
         authing,
-        setAuthing,
+        // setAuthing,
         email,
         setEmail,
         password,

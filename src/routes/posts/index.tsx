@@ -20,7 +20,7 @@ export const Route = createFileRoute('/posts/')({
 function Posts() {
 
   const {posts} = Route.useLoaderData();
-  const { q } = Route.useSearch();
+  // const { q } = Route.useSearch();
 
   return (
     <div>

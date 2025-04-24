@@ -1,4 +1,4 @@
-import React from 'react';
+// import React from 'react';
 
 const AltSettings = () => {
     const currencies = ['USD', 'EUR', 'GBP'];

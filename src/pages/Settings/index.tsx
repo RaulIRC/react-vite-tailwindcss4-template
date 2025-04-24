@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { useSettingsConfig, SettingsConfig } from '../../contexts/settingsContext/settingsContext';
-import { useAuthLogic } from '../../contexts/authContext';
+// import { useAuthLogic } from '../../contexts/authContext';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '../../firebase/firebaseConfig';
 
@@ -10,13 +10,13 @@ export const Settings = () => {
   const [ currency, setCurrency ] = React.useState<string>("")
   const [ theme, setTheme ] = React.useState<string>("")
 
-  const { handleSettingsConfig } = useAuthLogic(); // Importing the settings context
+  // const { handleSettingsConfig } = useAuthLogic(); // Importing the settings context
 
   const [user] = useAuthState(auth);
   const userID = user?.uid || ""; // Get user ID from auth state, or set to empty string if not authenticated
 
 
-  const adminMode: boolean = true;
+  const adminMode: boolean = false;
   const { settingsConfig, updateConfig, createConfig } = useSettingsConfig();
 
   const newConfig: SettingsConfig = {
@@ -75,9 +75,9 @@ export const Settings = () => {
       <div className="flex flex-col gap-4">
         {adminMode && (
           <>
-            <button className="btn btn-primary" onClick={handleSettingsConfig}>
+            {/* <button className="btn btn-primary" onClick={handleSettingsConfig}>
           Press here to run handle config.
-            </button>
+            </button> */}
             <button className="btn btn-secondary" onClick={() => createConfig(newConfig)}>
           press here to create config.
             </button>

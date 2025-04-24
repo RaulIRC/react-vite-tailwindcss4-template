@@ -4,7 +4,7 @@ import { auth, provider, analytics } from "../../firebase/firebaseConfig"; // Fi
 import { useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { logEvent } from "firebase/analytics";
-import { useSettingsConfig, SettingsConfig } from "../../contexts/settingsContext/settingsContext"; // Importing the settings context
+// import { useSettingsConfig, SettingsConfig } from "../../contexts/settingsContext/settingsContext"; // Importing the settings context
 import { useAuthState } from 'react-firebase-hooks/auth';
 
 export const useAuthLogic = () => {
@@ -20,7 +20,7 @@ export const useAuthLogic = () => {
 
   // We will be calling on this when we detect that there is no config. to apply default settings.
 
-  const { settingsConfig, createConfig } = useSettingsConfig(); // State to hold settings configuration
+  // const { settingsConfig, createConfig } = useSettingsConfig(); // State to hold settings configuration
 
 
 

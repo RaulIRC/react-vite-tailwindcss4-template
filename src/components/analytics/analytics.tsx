@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { getAnalytics, logEvent } from "firebase/analytics";
 import { useLocation as useReactRouterLocation } from '@tanstack/react-router';
 import { useRef as useReactRef } from 'react';
-import { useAuthLogic } from '../../contexts/authContext';
+// import { useAuthLogic } from '../../contexts/authContext';
 
 export const Analytics = () => {
     const location = useReactRouterLocation();

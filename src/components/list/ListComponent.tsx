@@ -1,107 +1,107 @@
 import React, { useState } from "react";
-import { FinancialRecord, useFinancialRecords } from "../../contexts/formContext/financial-record-context";
-import { useReactTable, getCoreRowModel, CellContext, createColumnHelper } from "@tanstack/react-table";
+import { useFinancialRecords } from "../../contexts/formContext/financial-record-context";
+// import { useReactTable, getCoreRowModel, CellContext, createColumnHelper } from "@tanstack/react-table";
 import ErrorAlert from "../alert/ErrorAlert";
 
-interface EditableCellProps extends CellContext<FinancialRecord, unknown> {
-  updateRecord: (rowIndex: number, columnId: string, value: unknown) => void;
-  editable: boolean;
-}
+// interface EditableCellProps extends CellContext<FinancialRecord, unknown> {
+//   updateRecord: (rowIndex: number, columnId: string, value: unknown) => void;
+//   editable: boolean;
+// }
 
-const EditableCell: React.FC<EditableCellProps> = ({
-  getValue,
-  row,
-  column,
-  updateRecord,
-  editable,
-}) => {
-  const [isEditing, setIsEditing] = useState(false);
-  const [value, setValue] = useState(getValue());
+// const EditableCell: React.FC<EditableCellProps> = ({
+//   getValue,
+//   row,
+//   column,
+//   updateRecord,
+//   editable,
+// }) => {
+//   const [isEditing, setIsEditing] = useState(false);
+//   const [value, setValue] = useState(getValue());
 
-  const onBlur = () => {
-    setIsEditing(false);
-    updateRecord(row.index, column.id, value);
-  };
+//   const onBlur = () => {
+//     setIsEditing(false);
+//     updateRecord(row.index, column.id, value);
+//   };
 
-  return (
-    <div
-      onClick={() => editable && setIsEditing(true)}
-      style={{ cursor: editable ? "pointer" : "default" }}
-      className="financial-records-editable-cell"
-    >
-      {isEditing ? (
-        <input
-          value={value as string}
-          onChange={(e) => setValue(e.target.value)}
-          autoFocus
-          onBlur={onBlur}
-          style={{ width: "100%" }}
-          className="input input-bordered input-sm"
-        />
-      ) : typeof value === "string" ? (
-        value
-      ) : value !== undefined ? (
-        value !== null ? value.toString() : ""
-      ) : (
-        <span className="text-gray-400">N/A</span> // Placeholder text
-      )}
-    </div>
-  );
-};
+//   return (
+//     <div
+//       onClick={() => editable && setIsEditing(true)}
+//       style={{ cursor: editable ? "pointer" : "default" }}
+//       className="financial-records-editable-cell"
+//     >
+//       {isEditing ? (
+//         <input
+//           value={value as string}
+//           onChange={(e) => setValue(e.target.value)}
+//           autoFocus
+//           onBlur={onBlur}
+//           style={{ width: "100%" }}
+//           className="input input-bordered input-sm"
+//         />
+//       ) : typeof value === "string" ? (
+//         value
+//       ) : value !== undefined ? (
+//         value !== null ? value.toString() : ""
+//       ) : (
+//         <span className="text-gray-400">N/A</span> // Placeholder text
+//       )}
+//     </div>
+//   );
+// };
 
 export const ListComponent: React.FC = () => {
-    const { records, updateRecord, deleteRecord } = useFinancialRecords();
+    const { records, deleteRecord } = useFinancialRecords();
     const [isEditMode, setIsEditMode] = useState(false);
 
     const sortedRecords = [...records].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
-    const updateCellRecord = (rowIndex: number, columnId: string, value: any) => {
-      const id = records[rowIndex]?._id;
-      updateRecord(id ?? "", { ...records[rowIndex], [columnId]: value });
-    };
+    // const updateCellRecord = (rowIndex: number, columnId: string, value: any) => {
+    //   const id = records[rowIndex]?._id;
+    //   updateRecord(id ?? "", { ...records[rowIndex], [columnId]: value });
+    // };
 
-    const columnHelper = createColumnHelper<FinancialRecord>();
+    // const columnHelper = createColumnHelper<FinancialRecord>();
 
-    const columns = [
-        columnHelper.accessor("description", {
-          header: "Description",
-          cell: (props) => <EditableCell {...props} updateRecord={updateCellRecord} editable />,
-          footer: (info) => info.column.id,
-        }),
-        columnHelper.accessor("amount", {
-          header: "Amount",
-          cell: (props) => <EditableCell {...props} updateRecord={updateCellRecord} editable />,
-          footer: (info) => info.column.id,
-        }),
-        columnHelper.accessor("category", {
-          header: "Category",
-          cell: (props) => <EditableCell {...props} updateRecord={updateCellRecord} editable />,
-          footer: (info) => info.column.id,
-        }),
-        columnHelper.accessor("paymentMethod", {
-          header: "Payment Method",
-          cell: (props) => <EditableCell {...props} updateRecord={updateCellRecord} editable />,
-          footer: (info) => info.column.id,
-        }),
-        columnHelper.accessor("date", {
-          header: "Date",
-          cell: (props) => <EditableCell {...props} updateRecord={updateCellRecord} editable />,
-          footer: (info) => info.column.id,
-        }),
-        columnHelper.display({
-          id: "delete",
-          header: "Delete",
-          cell: ({ row }) => (
-            <button
-              onClick={() => deleteRecord(row.original._id ?? "")}
-              className="btn btn-error btn-sm"
-            >
-              <span role="img" aria-label="trash">🗑️</span>
-            </button>
-          ),
-          footer: (info) => info.column.id,
-        }),
-      ];
+    // const columns = [
+    //     columnHelper.accessor("description", {
+    //       header: "Description",
+    //       cell: (props) => <EditableCell {...props} updateRecord={updateCellRecord} editable />,
+    //       footer: (info) => info.column.id,
+    //     }),
+    //     columnHelper.accessor("amount", {
+    //       header: "Amount",
+    //       cell: (props) => <EditableCell {...props} updateRecord={updateCellRecord} editable />,
+    //       footer: (info) => info.column.id,
+    //     }),
+    //     columnHelper.accessor("category", {
+    //       header: "Category",
+    //       cell: (props) => <EditableCell {...props} updateRecord={updateCellRecord} editable />,
+    //       footer: (info) => info.column.id,
+    //     }),
+    //     columnHelper.accessor("paymentMethod", {
+    //       header: "Payment Method",
+    //       cell: (props) => <EditableCell {...props} updateRecord={updateCellRecord} editable />,
+    //       footer: (info) => info.column.id,
+    //     }),
+    //     columnHelper.accessor("date", {
+    //       header: "Date",
+    //       cell: (props) => <EditableCell {...props} updateRecord={updateCellRecord} editable />,
+    //       footer: (info) => info.column.id,
+    //     }),
+    //     columnHelper.display({
+    //       id: "delete",
+    //       header: "Delete",
+    //       cell: ({ row }) => (
+    //         <button
+    //           onClick={() => deleteRecord(row.original._id ?? "")}
+    //           className="btn btn-error btn-sm"
+    //         >
+    //           <span role="img" aria-label="trash">🗑️</span>
+    //         </button>
+    //       ),
+    //       footer: (info) => info.column.id,
+    //     }),
+    //   ];
 
     const paymentMethodIcons: Record<string, string> = {
         Cash: "💵",

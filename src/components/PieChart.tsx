@@ -36,7 +36,7 @@ const ChartComponent = () => {
             plugins: {
                 legend: {
                     display: true,
-                    position: "right",
+                    position: 'right',
                     title: {
                         display: true,
                         text: "Costs by Category",
@@ -46,9 +46,9 @@ const ChartComponent = () => {
 
                     // get the piechart data for the legend
                     labels: {
-                        generateLabels: (chart) => {
+                        generateLabels: (chart: { data: { datasets: any; labels: { [x: string]: unknown; }; }; }) => {
                             const datasets = chart.data.datasets;
-                            return datasets[0].data.map((data, i) => ({
+                            return datasets[0].data.map((data: any, i: string | number) => ({
                                 text: `${chart.data.labels[i]} ${": $"} ${data}`,
                                 fillStyle: datasets[0].backgroundColor[i],
                                 index: i,

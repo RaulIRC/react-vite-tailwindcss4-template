@@ -102,7 +102,7 @@ export const Dashboard = () => {
                 </div>
                 <div className="overflow-x-auto my-4">
                     {/* <FinancialRecordList /> */}
-                    <ListComponent description={""} amount={0} category={""} paymentMethod={""} date={""} />
+                    <ListComponent />
                 </div>
             </div>
         </div>

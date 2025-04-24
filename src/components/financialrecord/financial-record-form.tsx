@@ -12,7 +12,7 @@ export const FinancialRecordForm = () => {
     const [paymentMethod, setPaymentMethod] = useState<string>("");
     const { addRecord } = useFinancialRecords();
 
-    const [user, loading, error] = useAuthState(auth);
+    const [user] = useAuthState(auth);
 
     // handleSubmit is the equivalent to schema
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
